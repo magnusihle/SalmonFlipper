@@ -1,0 +1,11 @@
+{
+  "name": "salmon-deboning-planner",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "fetch-prices": "node scripts/fetch-prices.mjs",
+    "test": "node --test"
+  }
+}
