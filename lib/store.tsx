@@ -32,7 +32,7 @@ interface AppState extends PersistedState {
   hydrated: boolean;
 }
 
-const STORAGE_KEY = "fishbone:v1";
+const STORAGE_KEY = "fishbone:v2";
 
 function rebalanceMix(mix: CutMix, plan: CutPlan, value: number): CutMix {
   const v = Math.max(0, Math.min(1, value));

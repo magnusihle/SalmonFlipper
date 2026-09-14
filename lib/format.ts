@@ -11,13 +11,13 @@ export function kg(n: number, unit = true) {
 export function money(n: number) {
   const abs = Math.abs(n);
   const sign = n < 0 ? "−" : "";
-  if (abs >= 1_000_000) return `${sign}${CURRENCY}${oneFmt.format(abs / 1_000_000)}M`;
-  if (abs >= 10_000) return `${sign}${CURRENCY}${oneFmt.format(abs / 1000)}k`;
-  return `${sign}${CURRENCY}${intFmt.format(abs)}`;
+  if (abs >= 1_000_000) return `${sign}${oneFmt.format(abs / 1_000_000)}M ${CURRENCY}`;
+  if (abs >= 10_000) return `${sign}${oneFmt.format(abs / 1000)}k ${CURRENCY}`;
+  return `${sign}${intFmt.format(abs)} ${CURRENCY}`;
 }
 
 export function price(n: number) {
-  return `${CURRENCY}${n.toFixed(2)}/kg`;
+  return `${n.toFixed(2)} ${CURRENCY}/kg`;
 }
 
 export function pct(n: number) {

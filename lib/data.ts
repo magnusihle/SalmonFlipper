@@ -11,45 +11,48 @@ import type {
   WeekInput,
 } from "./types";
 
-export const CURRENCY = "$";
+export const CURRENCY = "kr";
 export const WEEK_COUNT = 8;
 
+// Product codes follow Source_Brief.md / fisk_plan_seed.json. Collar is not in the brief's graph.
 export const PARTS: PartDef[] = [
-  { id: "hog", name: "Whole (HOG)", color: "#8ecae6", freezable: false, description: "Head-on gutted, sold whole" },
-  { id: "fillet", name: "Fillet", color: "#ff7a59", freezable: true, description: "Skin-on side fillets" },
-  { id: "portion", name: "Portions", color: "#ffb347", freezable: true, description: "Skinless portion cuts" },
-  { id: "belly", name: "Belly", color: "#f4d35e", freezable: true, description: "Fatty belly strips" },
-  { id: "collar", name: "Collar", color: "#e08e79", freezable: true, description: "Collar behind the gills" },
-  { id: "head", name: "Head", color: "#9db4c0", freezable: false, description: "Heads for stock" },
-  { id: "frame", name: "Frame", color: "#c8d5b9", freezable: false, description: "Backbone and ribs" },
-  { id: "trim", name: "Trim", color: "#d9a5b3", freezable: true, description: "Offcuts and mince" },
-  { id: "skin", name: "Skin", color: "#b8b8ff", freezable: true, description: "Skins from portioning" },
+  { id: "hog", name: "HOG", color: "#8ecae6", freezable: false, description: "Head-on gutted, sold whole" },
+  { id: "fillet", name: "Trim C", color: "#ff7a59", freezable: true, description: "Skin-on PBO fillet, belly trimmed" },
+  { id: "portion", name: "Portions", color: "#ffb347", freezable: true, description: "Skinless portions (PORTION_E)" },
+  { id: "belly", name: "Belly flap", color: "#f4d35e", freezable: true, description: "Belly flap" },
+  { id: "collar", name: "Collar", color: "#e08e79", freezable: true, description: "Not in the brief's graph" },
+  { id: "head", name: "Head", color: "#9db4c0", freezable: false, description: "Head" },
+  { id: "frame", name: "Frame", color: "#c8d5b9", freezable: false, description: "Frame" },
+  { id: "trim", name: "Mince", color: "#d9a5b3", freezable: true, description: "Trim / mince" },
+  { id: "skin", name: "Skin", color: "#b8b8ff", freezable: true, description: "Skin from Trim E" },
 ];
 
 export const PART_BY_ID = Object.fromEntries(PARTS.map((p) => [p.id, p])) as Record<PartId, PartDef>;
 export const PART_IDS = PARTS.map((p) => p.id);
 
 export const CUT_PLANS: CutPlanDef[] = [
+  // Yields are cumulative fractions of ROUND from the seed graph; costs are NOK per kg round,
+  // summed over the cost centres on each path (cost per kg in × cumulative yield of the centre's parent).
   {
     id: "whole",
-    name: "Sell whole",
-    description: "No processing. Sold as head-on gutted fish.",
-    processingCostPerKg: 0,
-    yields: { hog: 1 },
+    name: "Sell as HOG",
+    description: "Gut only. Sold head-on gutted.",
+    processingCostPerKg: 2.0,
+    yields: { hog: 0.88 },
   },
   {
     id: "fillet",
-    name: "Fillet cut",
-    description: "Two skin-on fillets plus head, frame, belly, collar and trim.",
-    processingCostPerKg: 1.0,
-    yields: { fillet: 0.58, head: 0.09, frame: 0.12, belly: 0.06, collar: 0.04, trim: 0.04 },
+    name: "Trim C fillet",
+    description: "Gut, head, fillet, trim to C. Head, frame, belly and mince come off the same fish.",
+    processingCostPerKg: 7.9,
+    yields: { fillet: 0.551, head: 0.0968, frame: 0.141, belly: 0.0439, trim: 0.0313 },
   },
   {
     id: "portion",
-    name: "Portion cut",
-    description: "Fillets cut down to skinless portions. More trim and skin.",
-    processingCostPerKg: 2.2,
-    yields: { portion: 0.44, trim: 0.12, skin: 0.06, head: 0.09, frame: 0.12, belly: 0.06, collar: 0.04 },
+    name: "Trim E → portions",
+    description: "Trim and skin to E, then portion. More mince, plus skin.",
+    processingCostPerKg: 12.4,
+    yields: { portion: 0.434, trim: 0.0921, skin: 0.0439, head: 0.0968, frame: 0.141, belly: 0.0564 },
   },
 ];
 
@@ -61,7 +64,7 @@ export const CUT_PLAN_COLORS: Record<CutPlan, string> = {
   portion: "#ffb347",
 };
 
-export const FREEZE = { haircut: 0.2, costPerKg: 0.4 };
+export const FREEZE = { haircut: 0.2, costPerKg: 3 };
 
 export const CUSTOMERS: Customer[] = [
   { id: "bistro", name: "Nordic Bistro Group", kind: "Restaurant", color: "#f97316" },
@@ -82,25 +85,25 @@ interface BaseOrder {
   price: number;
 }
 
+// NOK/kg, in the range of the seed's order and residual prices.
 const BASE_ORDERS: BaseOrder[] = [
-  { customerId: "bistro", part: "fillet", kg: 320, price: 16.5 },
-  { customerId: "bistro", part: "collar", kg: 60, price: 7.5 },
-  { customerId: "bistro", part: "belly", kg: 80, price: 9.5 },
-  { customerId: "sushi", part: "fillet", kg: 250, price: 18 },
-  { customerId: "sushi", part: "belly", kg: 120, price: 12 },
-  { customerId: "freshmart", part: "portion", kg: 900, price: 21 },
-  { customerId: "freshmart", part: "fillet", kg: 400, price: 15.5 },
-  { customerId: "freshmart", part: "hog", kg: 300, price: 10.5 },
-  { customerId: "harbor", part: "hog", kg: 2400, price: 9.8 },
-  { customerId: "harbor", part: "fillet", kg: 600, price: 14.8 },
-  { customerId: "smokehouse", part: "fillet", kg: 700, price: 15 },
-  { customerId: "smokehouse", part: "belly", kg: 200, price: 8.5 },
-  { customerId: "smokehouse", part: "trim", kg: 150, price: 4.5 },
-  { customerId: "stock", part: "frame", kg: 500, price: 1.9 },
-  { customerId: "stock", part: "head", kg: 400, price: 2.6 },
-  { customerId: "petpure", part: "trim", kg: 400, price: 3.8 },
-  { customerId: "petpure", part: "skin", kg: 150, price: 3.2 },
-  { customerId: "petpure", part: "frame", kg: 300, price: 1.5 },
+  { customerId: "bistro", part: "fillet", kg: 320, price: 138 },
+  { customerId: "bistro", part: "belly", kg: 80, price: 25 },
+  { customerId: "sushi", part: "fillet", kg: 250, price: 148 },
+  { customerId: "sushi", part: "belly", kg: 120, price: 28 },
+  { customerId: "freshmart", part: "portion", kg: 900, price: 195 },
+  { customerId: "freshmart", part: "fillet", kg: 400, price: 132 },
+  { customerId: "freshmart", part: "hog", kg: 300, price: 82 },
+  { customerId: "harbor", part: "hog", kg: 2400, price: 78 },
+  { customerId: "harbor", part: "fillet", kg: 600, price: 126 },
+  { customerId: "smokehouse", part: "fillet", kg: 700, price: 130 },
+  { customerId: "smokehouse", part: "belly", kg: 200, price: 22 },
+  { customerId: "smokehouse", part: "trim", kg: 150, price: 14 },
+  { customerId: "stock", part: "frame", kg: 500, price: 3.5 },
+  { customerId: "stock", part: "head", kg: 400, price: 8 },
+  { customerId: "petpure", part: "trim", kg: 400, price: 12 },
+  { customerId: "petpure", part: "skin", kg: 150, price: 4 },
+  { customerId: "petpure", part: "frame", kg: 300, price: 3 },
 ];
 
 export interface ScenarioDef {
@@ -132,8 +135,8 @@ export const SCENARIOS: ScenarioDef[] = [
   {
     id: "hog-glut",
     name: "Whole-fish glut",
-    tagline: "Wholesale HOG price collapses",
-    description: "The spot market for whole fish drops 30%. Does processing pay off?",
+    tagline: "HOG price collapses",
+    description: "The spot market for head-on gutted fish drops 30%. Does processing pay off?",
   },
 ];
 
@@ -170,7 +173,7 @@ export function buildWeeks(scenario: ScenarioId): WeekInput[] {
     const season = 1 + 0.08 * Math.sin((w / WEEK_COUNT) * Math.PI * 2);
 
     let available = Math.round(1400 * season * (0.92 + rnd() * 0.16));
-    let costPerKg = +(7.8 * (0.96 + rnd() * 0.08)).toFixed(2);
+    let costPerKg = +(60 * (0.96 + rnd() * 0.08)).toFixed(2);
     const avgKg = +(4.4 + rnd() * 0.5).toFixed(1);
 
     let demandFactor: (part: PartId) => number = () => 0.9 + rnd() * 0.2;
