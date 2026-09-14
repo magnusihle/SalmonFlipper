@@ -1,5 +1,5 @@
 import { usePlan } from '../planner/usePlan'
-import { productName } from '../data/products'
+import { centreName, productName, useLang, useT } from '../i18n'
 import { kr, n0, n2, pct0, shortWeek } from '../format'
 import { Card } from './ui'
 
@@ -9,11 +9,21 @@ type Item = { tone: 'ok' | 'bad' | 'warn' | 'note'; text: string }
 export function ReadOut() {
   const { current } = usePlan()
   const { plan, finance } = current
+  const t = useT()
+  const lang = useLang()
   const items: Item[] = []
 
   items.push({
     tone: finance.marginNok >= 0 ? 'ok' : 'bad',
-    text: `Margin ${kr(finance.marginNok)} NOK on ${n0(plan.requiredRawKg)} kg raw (${n2(finance.marginPerRawKg)} NOK per raw kg): revenue ${kr(finance.revenueNok)}, residual ${kr(finance.residualNok)}, raw ${kr(finance.raw.costNok)}, processing ${kr(finance.processingNok)}.`,
+    text: t('readout.margin', {
+      margin: kr(finance.marginNok),
+      raw: n0(plan.requiredRawKg),
+      perKg: n2(finance.marginPerRawKg),
+      revenue: kr(finance.revenueNok),
+      residual: kr(finance.residualNok),
+      rawCost: kr(finance.raw.costNok),
+      processing: kr(finance.processingNok),
+    }),
   })
 
   if (plan.flag === 'CANNOT BE MET') {
@@ -21,22 +31,22 @@ export function ReadOut() {
     const drop = biggest && biggest.cumYield ? plan.gapRawKg * biggest.cumYield : 0
     items.push({
       tone: 'bad',
-      text: `Short ${n0(plan.gapRawKg)} kg raw. Buy that much more, or trim ${biggest.order.orderNo} (${biggest.order.product}) by ${n0(drop)} kg. About ${kr(finance.revenueAtRiskNok)} NOK of revenue rides on the missing fish.`,
+      text: t('readout.short', { gap: n0(plan.gapRawKg), order: biggest.order.orderNo, product: biggest.order.product, drop: n0(drop), atRisk: kr(finance.revenueAtRiskNok) }),
     })
   }
-  if (plan.flag === 'NO SUPPLY PLANNED') items.push({ tone: 'warn', text: 'No supply planned for this week — set raw kg in the supply card.' })
+  if (plan.flag === 'NO SUPPLY PLANNED') items.push({ tone: 'warn', text: t('readout.noSupply') })
 
   for (const b of plan.byproducts) {
     if (b.extraRawKg > 0.5) {
       items.push({
         tone: 'warn',
-        text: `${b.product} is ${n0(b.shortfallKg)} kg short of co-product output, so ${n0(b.extraRawKg)} kg of extra fish are bought for it; their ${b.fallsTo ?? 'cut product'} falls to residual.`,
+        text: t('readout.extraFish', { product: b.product, short: n0(b.shortfallKg), extra: n0(b.extraRawKg), fallsTo: b.fallsTo ?? t('readout.cutProduct') }),
       })
     } else if (b.coveredByExtraFishKg > 0.5) {
       const payer = plan.byproducts.find((o) => o.extraRawKg > 0.5)
       items.push({
         tone: 'note',
-        text: `${b.product}'s ${n0(b.shortfallKg)} kg shortfall is covered by the fish bought for ${payer?.product ?? 'another by-product'} — no extra fish of its own.`,
+        text: t('readout.coveredBy', { product: b.product, short: n0(b.shortfallKg), payer: payer?.product ?? t('readout.anotherByproduct') }),
       })
     }
   }
@@ -44,7 +54,7 @@ export function ReadOut() {
   for (const c of finance.overCapacity) {
     items.push({
       tone: 'bad',
-      text: `${c.center.name} runs at ${pct0(c.utilisation)} of its weekly capacity (${n0(c.kgIn)} of ${n0(c.capacityKg)} kg). Add a shift or move the volume to another week.`,
+      text: t('readout.overCapacity', { centre: centreName(lang, c.center.code, c.center.name), pct: pct0(c.utilisation), kg: n0(c.kgIn), cap: n0(c.capacityKg) }),
     })
   }
 
@@ -52,22 +62,28 @@ export function ReadOut() {
   if (top) {
     items.push({
       tone: 'note',
-      text: `Biggest unordered pile: ${n0(top.residualKg)} kg of ${productName(top.product)} worth ${kr(top.valueNok)} NOK at ${n2(top.nokPerKg)} NOK/kg (${top.rule}${top.rule === 'manual' ? ' placeholder' : ''}).`,
+      text: t('readout.biggestPile', {
+        kg: n0(top.residualKg),
+        product: productName(lang, top.product),
+        nok: kr(top.valueNok),
+        price: n2(top.nokPerKg),
+        rule: `${top.rule}${top.rule === 'manual' ? ` ${t('readout.placeholder')}` : ''}`,
+      }),
     })
   }
 
   if (plan.flag === 'OK' && plan.unallocatedRawKg > 0.5) {
     items.push({
       tone: 'note',
-      text: `${n0(plan.unallocatedRawKg)} kg raw left unbought — ${kr(finance.unallocated.valueNok)} NOK at the HOG reference of ${n2(finance.unallocated.nokPerKg)} NOK/kg (SSB ${finance.unallocated.priceWeek ? shortWeek(finance.unallocated.priceWeek) : ''}).`,
+      text: t('readout.unallocated', { kg: n0(plan.unallocatedRawKg), nok: kr(finance.unallocated.valueNok), price: n2(finance.unallocated.nokPerKg), week: finance.unallocated.priceWeek ? shortWeek(finance.unallocated.priceWeek) : '' }),
     })
   }
 
   const derived = finance.lines.filter((l) => l.priced === 'DERIVED')
-  if (derived.length) items.push({ tone: 'note', text: `${derived.length} order line${derived.length === 1 ? '' : 's'} carry no price and are valued by the price rules.` })
+  if (derived.length) items.push({ tone: 'note', text: derived.length === 1 ? t('readout.derived.one') : t('readout.derived.many', { n: derived.length }) })
 
   return (
-    <Card eyebrow={`Read-out · ${shortWeek(plan.week)}`} title="What the week says" from="bottom" delay={0.25} className="readout">
+    <Card eyebrow={`${t('readout.eyebrow')} · ${shortWeek(plan.week)}`} title={t('readout.title')} from="bottom" delay={0.25} className="readout">
       <ul>
         {items.slice(0, 6).map((it, i) => (
           <li key={i} className={it.tone}>

@@ -6,10 +6,12 @@ import { BUNDLED_PRICES } from './prices/book'
 import { mergePrices } from './prices/prices'
 import { fetchSsbPrices } from './prices/ssb'
 import type { PriceBook } from './prices/types'
-import { nextWeek } from './format'
+import { nextWeek, setFormatLocale } from './format'
+import { LOCALE, loadLang, saveLang, translate, type Lang } from './i18n/core'
 import { applyTheme, loadThemePref, resolveTheme, saveThemePref, watchSystemTheme, type Theme, type ThemePref } from './theme'
 
-export type PriceStatus = { state: 'idle' | 'loading' | 'ok' | 'error'; message: string }
+/** `weeks` is set on a successful fetch so the panel can phrase it in the current language */
+export type PriceStatus = { state: 'idle' | 'loading' | 'ok' | 'error'; message: string; weeks?: number }
 
 /** The editable plan — what the planner persists between visits. */
 interface PlanSlice {
@@ -37,6 +39,7 @@ interface State extends PlanSlice {
   theme: ThemePref
   /** the theme actually on screen */
   resolvedTheme: Theme
+  lang: Lang
   setHovered: (id: CutId | null) => void
   select: (id: CutId) => void
   clear: () => void
@@ -45,6 +48,7 @@ interface State extends PlanSlice {
   doTrick: () => void
   setTricking: (on: boolean) => void
   setTheme: (pref: ThemePref) => void
+  setLang: (lang: Lang) => void
   selectWeek: (week: string) => void
   addWeek: () => void
   setSupplyKg: (week: string, rawKg: number) => void
@@ -98,6 +102,7 @@ export const useStore = create<State>((set, get) => ({
   tricking: false,
   theme: loadThemePref(),
   resolvedTheme: resolveTheme(loadThemePref()),
+  lang: loadLang(),
   ...load(),
 
   setHovered: (hovered) => set({ hovered }),
@@ -111,6 +116,10 @@ export const useStore = create<State>((set, get) => ({
   setTheme: (theme) => {
     saveThemePref(theme)
     set({ theme, resolvedTheme: resolveTheme(theme) })
+  },
+  setLang: (lang) => {
+    saveLang(lang)
+    set({ lang })
   },
 
   selectWeek: (week) => set({ week }),
@@ -148,7 +157,7 @@ export const useStore = create<State>((set, get) => ({
 
   refreshSsb: async () => {
     if (get().priceStatus.state === 'loading') return
-    set({ priceStatus: { state: 'loading', message: 'Asking Statistics Norway…' } })
+    set({ priceStatus: { state: 'loading', message: '' } })
     try {
       const r = await fetchSsbPrices({ weeks: 12 })
       set((s) => ({
@@ -158,10 +167,10 @@ export const useStore = create<State>((set, get) => ({
           series: s.priceBook.series.map((x) => (x.source === 'SSB 03024' ? { ...x, updated: r.updated ?? x.updated } : x)),
           prices: mergePrices(s.priceBook.prices, r.prices),
         },
-        priceStatus: { state: 'ok', message: `${r.prices.length} weeks of HOG from SSB 03024` },
+        priceStatus: { state: 'ok', message: '', weeks: r.prices.length },
       }))
     } catch (e) {
-      set({ priceStatus: { state: 'error', message: e instanceof Error ? e.message : 'SSB request failed' } })
+      set({ priceStatus: { state: 'error', message: e instanceof Error ? e.message : '' } })
     }
   },
 }))
@@ -182,4 +191,15 @@ useStore.subscribe((s, prev) => {
 })
 watchSystemTheme((t) => {
   if (useStore.getState().theme === 'system') useStore.setState({ resolvedTheme: t })
+})
+
+function applyLang(lang: Lang) {
+  setFormatLocale(LOCALE[lang])
+  if (typeof document === 'undefined') return
+  document.documentElement.lang = lang
+  document.title = translate(lang, 'app.title')
+}
+applyLang(useStore.getState().lang)
+useStore.subscribe((s, prev) => {
+  if (s.lang !== prev.lang) applyLang(s.lang)
 })

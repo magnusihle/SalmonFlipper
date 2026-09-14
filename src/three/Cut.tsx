@@ -4,7 +4,8 @@ import { useFrame, type ThreeElements, type ThreeEvent } from '@react-three/fibe
 import { Html, useCursor } from '@react-three/drei'
 import { animated, useSpring } from '@react-spring/three'
 import { AnimatePresence, motion } from 'framer-motion'
-import { CUTS, type CutId } from '../data/cuts'
+import type { CutId } from '../data/cuts'
+import { useCuts } from '../i18n'
 import { LAYOUT } from './layout'
 import { useStore } from '../store'
 import { makeFleshTexture, makeSkinTexture, type SkinTextures } from './textures'
@@ -61,7 +62,7 @@ function makeMaterials(): CutMaterials {
  */
 export function Cut({ id, children }: { id: CutId; children: ReactNode }) {
   const layout = LAYOUT[id]
-  const info = CUTS[id]
+  const info = useCuts()[id]
 
   const hovered = useStore((s) => s.hovered)
   const selected = useStore((s) => s.selected)

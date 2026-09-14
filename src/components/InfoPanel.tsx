@@ -1,11 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { CUTS, CUT_ORDER } from '../data/cuts'
+import { CUT_ORDER } from '../data/cuts'
+import { useCuts, useT } from '../i18n'
 import { useStore } from '../store'
 import { CutDossier } from './CutDossier'
 
 function Richness({ n }: { n: number }) {
+  const t = useT()
   return (
-    <span className="dots" aria-label={`${n} of 5`}>
+    <span className="dots" aria-label={t('info.richness.aria', { n })}>
       {[0, 1, 2, 3, 4].map((i) => (
         <motion.i
           key={i}
@@ -26,6 +28,8 @@ function Richness({ n }: { n: number }) {
 export function InfoPanel({ variant = 'float' }: { variant?: 'float' | 'board' }) {
   const selected = useStore((s) => s.selected)
   const clear = useStore((s) => s.clear)
+  const CUTS = useCuts()
+  const t = useT()
   const cut = selected ? CUTS[selected] : null
   const onBoard = variant === 'board'
 
@@ -40,11 +44,11 @@ export function InfoPanel({ variant = 'float' }: { variant?: 'float' | 'board' }
           exit={onBoard ? { opacity: 0, y: 24, transition: { duration: 0.18 } } : { opacity: 0, x: 32, transition: { duration: 0.18 } }}
           transition={{ type: 'spring', stiffness: 260, damping: 24 }}
         >
-          <button className="close" onClick={clear} aria-label="Close">
+          <button className="close" onClick={clear} aria-label={t('info.close')}>
             ×
           </button>
           <p className="eyebrow">
-            Cut {String(cut.order + 1).padStart(2, '0')} of {CUT_ORDER.length}
+            {t('info.cutOf', { n: String(cut.order + 1).padStart(2, '0'), total: CUT_ORDER.length })}
           </p>
           <h2>
             {cut.name}
@@ -54,11 +58,11 @@ export function InfoPanel({ variant = 'float' }: { variant?: 'float' | 'board' }
             <>
               <p className="blurb">{cut.blurb}</p>
               <div className="row">
-                <span className="label">Richness</span>
+                <span className="label">{t('info.richness')}</span>
                 <Richness n={cut.richness} />
               </div>
               <div className="row">
-                <span className="label">Best for</span>
+                <span className="label">{t('info.bestFor')}</span>
                 <ul className="pills">
                   {cut.bestFor.map((b, i) => (
                     <motion.li key={b} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 + i * 0.06 }}>

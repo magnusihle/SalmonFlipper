@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useT } from '../i18n'
 
 const rise = {
   hidden: { opacity: 0, y: 16 },
@@ -6,6 +7,7 @@ const rise = {
 }
 
 export function Header() {
+  const t = useT()
   return (
     <motion.header
       className="header"
@@ -15,12 +17,12 @@ export function Header() {
       variants={{ show: { transition: { staggerChildren: 0.14 } } }}
     >
       <motion.p className="overline" variants={rise}>
-        The Ultimate
+        {t('header.overline')}
       </motion.p>
-      <motion.h1 variants={rise}>Salmon Cuts</motion.h1>
+      <motion.h1 variants={rise}>{t('header.title')}</motion.h1>
       <motion.div className="rule" variants={rise}>
         <span />
-        <p>and culinary guide</p>
+        <p>{t('header.rule')}</p>
         <span />
       </motion.div>
     </motion.header>

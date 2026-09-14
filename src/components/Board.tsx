@@ -8,6 +8,7 @@ import { FlowPanel } from './FlowPanel'
 import { WeeksChart } from './WeeksChart'
 import { ReadOut } from './ReadOut'
 import { InfoPanel } from './InfoPanel'
+import { useT } from '../i18n'
 
 /**
  * The planner board. Lays the panels around the fish, which has zoomed out into the middle cell;
@@ -16,14 +17,15 @@ import { InfoPanel } from './InfoPanel'
 export function Board() {
   const open = useStore((s) => s.board)
   const resetPlan = useStore((s) => s.resetPlan)
+  const t = useT()
   return (
     <AnimatePresence>
       {open && (
         <motion.div className="board-layer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.22 } }}>
           <div className="board-top">
             <WeekStrip />
-            <button className="btn ghost reset" onClick={resetPlan} title="Back to the seed orders, supply and prices">
-              reset plan
+            <button className="btn ghost reset" onClick={resetPlan} title={t('board.reset.title')}>
+              {t('board.reset')}
             </button>
           </div>
           <div className="board-left">

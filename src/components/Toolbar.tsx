@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useStore } from '../store'
 import type { ThemePref } from '../theme'
+import { useT, type T } from '../i18n'
+import type { MessageKey } from '../i18n/en'
 
 function Switch({ on, onClick, label }: { on: boolean; onClick: () => void; label: string }) {
   return (
@@ -14,29 +16,29 @@ function Switch({ on, onClick, label }: { on: boolean; onClick: () => void; labe
   )
 }
 
-const THEMES: { id: ThemePref; label: string; icon: string }[] = [
-  { id: 'system', label: 'Follow system theme', icon: 'M4 5h16v11H4z M9 20h6 M12 16v4' },
-  { id: 'light', label: 'Light theme', icon: 'M12 7a5 5 0 1 0 0 10a5 5 0 1 0 0-10 M12 2v2 M12 20v2 M2 12h2 M20 12h2 M5 5l1.5 1.5 M17.5 17.5L19 19 M5 19l1.5-1.5 M17.5 6.5L19 5' },
-  { id: 'dark', label: 'Dark theme', icon: 'M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z' },
+const THEMES: { id: ThemePref; label: MessageKey; icon: string }[] = [
+  { id: 'system', label: 'toolbar.theme.system', icon: 'M4 5h16v11H4z M9 20h6 M12 16v4' },
+  { id: 'light', label: 'toolbar.theme.light', icon: 'M12 7a5 5 0 1 0 0 10a5 5 0 1 0 0-10 M12 2v2 M12 20v2 M2 12h2 M20 12h2 M5 5l1.5 1.5 M17.5 17.5L19 19 M5 19l1.5-1.5 M17.5 6.5L19 5' },
+  { id: 'dark', label: 'toolbar.theme.dark', icon: 'M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z' },
 ]
 
-function ThemeControl() {
+function ThemeControl({ t }: { t: T }) {
   const theme = useStore((s) => s.theme)
   const setTheme = useStore((s) => s.setTheme)
   return (
-    <div className="theme-seg" role="radiogroup" aria-label="Colour theme">
-      {THEMES.map((t) => (
+    <div className="theme-seg" role="radiogroup" aria-label={t('toolbar.theme')}>
+      {THEMES.map((th) => (
         <button
-          key={t.id}
+          key={th.id}
           role="radio"
-          aria-checked={theme === t.id}
-          aria-label={t.label}
-          title={t.label}
-          className={theme === t.id ? 'on' : ''}
-          onClick={() => setTheme(t.id)}
+          aria-checked={theme === th.id}
+          aria-label={t(th.label)}
+          title={t(th.label)}
+          className={theme === th.id ? 'on' : ''}
+          onClick={() => setTheme(th.id)}
         >
           <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
-            <path d={t.icon} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            <path d={th.icon} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
       ))}
@@ -44,7 +46,19 @@ function ThemeControl() {
   )
 }
 
+function LangToggle({ t }: { t: T }) {
+  const lang = useStore((s) => s.lang)
+  const setLang = useStore((s) => s.setLang)
+  return (
+    <button className="lang" onClick={() => setLang(lang === 'en' ? 'nb' : 'en')} title={t('toolbar.lang')} aria-label={t('toolbar.lang')}>
+      <span className={lang === 'en' ? 'on' : ''}>EN</span>
+      <span className={lang === 'nb' ? 'on' : ''}>NO</span>
+    </button>
+  )
+}
+
 export function Toolbar() {
+  const t = useT()
   const exploded = useStore((s) => s.exploded)
   const toggle = useStore((s) => s.toggleExploded)
   const board = useStore((s) => s.board)
@@ -66,14 +80,14 @@ export function Toolbar() {
 
   return (
     <motion.div className="toolbar" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 0.6 }}>
-      <span className="hint">{board ? 'click a cut for its plan' : 'drag to orbit · click a cut'}</span>
+      <span className="hint">{board ? t('toolbar.hint.board') : t('toolbar.hint.poster')}</span>
       <motion.button
         className={`trick${tricking ? ' busy' : ''}`}
         onClick={doTrick}
         disabled={tricking}
         whileTap={{ scale: 0.94 }}
-        aria-label="Make the salmon do a trick"
-        title="Do a trick (T)"
+        aria-label={t('toolbar.trick.aria')}
+        title={t('toolbar.trick.title')}
       >
         <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
           <path
@@ -82,11 +96,21 @@ export function Toolbar() {
           />
           <circle cx="8" cy="11" r="1.1" fill="#fffaf0" />
         </svg>
-        <span>{tricking ? 'Whee!' : 'Do a trick'}</span>
+        <span>{tricking ? t('toolbar.trick.busy') : t('toolbar.trick')}</span>
       </motion.button>
-      <Switch on={exploded} onClick={toggle} label="Exploded view" />
-      <Switch on={board} onClick={toggleBoard} label="Plan board" />
-      <ThemeControl />
+      <Switch on={exploded} onClick={toggle} label={t('toolbar.exploded')} />
+      <Switch on={board} onClick={toggleBoard} label={t('toolbar.board')} />
+    </motion.div>
+  )
+}
+
+/** Theme and language live in the opposite corner so the toolbar never crowds the centred title. */
+export function Prefs() {
+  const t = useT()
+  return (
+    <motion.div className="prefs" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 0.6 }}>
+      <LangToggle t={t} />
+      <ThemeControl t={t} />
     </motion.div>
   )
 }

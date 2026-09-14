@@ -262,6 +262,16 @@ body::before {
   }
 }
 
+.prefs {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 3;
+}
+
 .hint {
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -341,6 +351,34 @@ body::before {
 }
 
 .theme-seg button.on {
+  background: var(--salmon);
+  color: #fffaf0;
+}
+
+.lang {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(var(--card-rgb), 0.8);
+  cursor: pointer;
+  font-family: var(--sans);
+}
+
+.lang span {
+  padding: 0 8px;
+  height: 26px;
+  line-height: 26px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  transition: background 0.2s, color 0.2s;
+}
+
+.lang span.on {
   background: var(--salmon);
   color: #fffaf0;
 }
@@ -580,6 +618,8 @@ body::before {
   display: flex;
   align-items: center;
   gap: 12px;
+  /* clear the prefs cluster on the left and the toolbar on the right */
+  padding-left: 200px;
   padding-right: 610px;
 }
 
@@ -1334,6 +1374,7 @@ input[type='range'] {
     padding-top: 64px;
   }
   .board-top {
+    padding-left: 0;
     padding-right: 0;
   }
   .board-stage {
@@ -1362,7 +1403,14 @@ input[type='range'] {
   }
 
   .board-top {
+    padding-left: 116px;
     padding-right: 560px;
+  }
+
+  .board-on .prefs {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
   }
 
   .wk {

@@ -4,6 +4,7 @@ import { pushPull } from '../planner/balance'
 import { tone } from '../data/products'
 import { n0, shortWeek } from '../format'
 import { Card } from './ui'
+import { useT } from '../i18n'
 
 const W = 760
 const H = 270
@@ -20,6 +21,7 @@ export function FlowPanel() {
   const { g, current } = usePlan()
   const { plan, balance } = current
   const [hover, setHover] = useState<string | null>(null)
+  const t = useT()
 
   const { nodes, links } = useMemo(() => {
     const nodes: Node[] = []
@@ -28,7 +30,7 @@ export function FlowPanel() {
 
     plan.pulls.forEach((pull, i) => {
       const id = `pull:${i}`
-      const label = pull.reason.kind === 'ORDER' ? `${pull.reason.orderNo} · ${pull.endProduct}` : `Extra fish · ${pull.reason.product}`
+      const label = pull.reason.kind === 'ORDER' ? `${pull.reason.orderNo} · ${pull.endProduct}` : `${t('flow.extraFish')} · ${pull.reason.product}`
       nodes.push({ id, label, sub: `${n0(pull.rawKg)} kg`, color: pull.reason.kind === 'ORDER' ? tone(pull.endProduct) : tone('ROUND'), col: 0, kg: pull.rawKg, y: 0, h: 0 })
       for (const [product, kg] of pushPull(g, pull)) raw.push({ source: id, target: `prod:${product}`, kg, color: tone(product) })
     })
@@ -44,9 +46,9 @@ export function FlowPanel() {
     }
     const sum = (target: string) => raw.filter((l) => l.target === target).reduce((s, l) => s + l.kg, 0)
     const dest = [
-      { id: 'dest:ordered', label: 'Ordered', color: 'var(--salmon-deep)' },
-      { id: 'dest:residual', label: 'Residual', color: '#a99d84' },
-      { id: 'dest:loss', label: 'Loss', color: '#cfc6b3' },
+      { id: 'dest:ordered', label: t('flow.ordered'), color: 'var(--salmon-deep)' },
+      { id: 'dest:residual', label: t('flow.residual'), color: '#a99d84' },
+      { id: 'dest:loss', label: t('flow.loss'), color: '#cfc6b3' },
     ]
     for (const d of dest) {
       const kg = sum(d.id)
@@ -83,15 +85,15 @@ export function FlowPanel() {
       links.push({ ...l, sy, ty, h })
     }
     return { nodes, links }
-  }, [g, plan, balance])
+  }, [g, plan, balance, t])
 
   const byId = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes])
   const dim = (l: Link) => hover !== null && l.source !== hover && l.target !== hover
 
   return (
-    <Card eyebrow={`Flow · ${shortWeek(plan.week)}`} title="Where every kilo goes" from="bottom" delay={0.15} className="flow">
+    <Card eyebrow={`${t('flow.eyebrow')} · ${shortWeek(plan.week)}`} title={t('flow.title')} from="bottom" delay={0.15} className="flow">
       {nodes.length === 0 ? (
-        <p className="path">Nothing to cut this week.</p>
+        <p className="path">{t('flow.empty')}</p>
       ) : (
         <svg viewBox={`0 0 ${W} ${H}`} className="flow-svg" onMouseLeave={() => setHover(null)}>
           {links.map((l, i) => {
@@ -122,13 +124,13 @@ export function FlowPanel() {
           })}
           <g className="flow-col">
             <text x={COL_X[0] + NODE_W / 2} y={11} textAnchor="middle">
-              RAW PULLS
+              {t('flow.rawPulls')}
             </text>
             <text x={COL_X[1] + NODE_W / 2} y={11} textAnchor="middle">
-              PRODUCTS
+              {t('flow.products')}
             </text>
             <text x={COL_X[2] + NODE_W / 2} y={11} textAnchor="middle">
-              DESTINATION
+              {t('flow.destination')}
             </text>
           </g>
         </svg>

@@ -3,12 +3,14 @@ import { usePlan } from '../planner/usePlan'
 import { useStore } from '../store'
 import { kr, n0, shortWeek } from '../format'
 import { Flag } from './ui'
+import { useT } from '../i18n'
 
 export function WeekStrip() {
   const { weeks } = usePlan()
   const week = useStore((s) => s.week)
   const selectWeek = useStore((s) => s.selectWeek)
   const addWeek = useStore((s) => s.addWeek)
+  const t = useT()
 
   return (
     <motion.nav
@@ -18,7 +20,7 @@ export function WeekStrip() {
       exit={{ opacity: 0, y: -10, transition: { duration: 0.18 } }}
       transition={{ type: 'spring', stiffness: 260, damping: 26 }}
     >
-      <span className="weeks-label">Weeks</span>
+      <span className="weeks-label">{t('weeks.label')}</span>
       {weeks.map(({ plan, finance }, i) => {
         const active = plan.week === week
         const supply = plan.supplyRawKg ?? 0
@@ -41,15 +43,15 @@ export function WeekStrip() {
               <i style={{ width: `${share * 100}%` }} />
             </span>
             <span className="wk-meta">
-              {n0(plan.requiredRawKg)} <em>/ {plan.supplyRawKg !== undefined ? n0(plan.supplyRawKg) : '–'} kg raw</em>
+              {n0(plan.requiredRawKg)} <em>{t('weeks.raw', { supply: plan.supplyRawKg !== undefined ? n0(plan.supplyRawKg) : '–' })}</em>
             </span>
             <span className={`wk-margin${finance.marginNok < 0 ? ' bad' : ''}`}>{kr(finance.marginNok)} NOK</span>
             {active && <motion.span className="wk-underline" layoutId="wk-underline" transition={{ type: 'spring', stiffness: 400, damping: 30 }} />}
           </motion.button>
         )
       })}
-      <button className="wk add" onClick={addWeek} title="Add the next week">
-        + week
+      <button className="wk add" onClick={addWeek} title={t('weeks.add.title')}>
+        {t('weeks.add')}
       </button>
     </motion.nav>
   )

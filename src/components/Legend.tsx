@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { CUTS, CUT_ORDER } from '../data/cuts'
+import { CUT_ORDER } from '../data/cuts'
+import { useCuts } from '../i18n'
 import { useStore } from '../store'
 
 export function Legend() {
@@ -7,6 +8,7 @@ export function Legend() {
   const selected = useStore((s) => s.selected)
   const setHovered = useStore((s) => s.setHovered)
   const select = useStore((s) => s.select)
+  const CUTS = useCuts()
 
   return (
     <motion.nav

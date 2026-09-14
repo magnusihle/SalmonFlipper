@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { usePlan } from '../planner/usePlan'
 import { useStore } from '../store'
-import { ORDERABLE, productName } from '../data/products'
+import { ORDERABLE } from '../data/products'
+import { kindLabel, productName, useLang, useT } from '../i18n'
 import { kr, n0, pathText, pct, shortWeek } from '../format'
 import { Card, Flag, NumberField } from './ui'
 
@@ -12,11 +13,13 @@ export function OrdersPanel() {
   const addOrder = useStore((s) => s.addOrder)
   const removeOrder = useStore((s) => s.removeOrder)
   const [newProduct, setNewProduct] = useState('TRIM_C')
+  const t = useT()
+  const lang = useLang()
 
   return (
     <Card
-      eyebrow={`Demand · ${shortWeek(plan.week)}`}
-      title="Orders"
+      eyebrow={`${t('orders.eyebrow')} · ${shortWeek(plan.week)}`}
+      title={t('orders.title')}
       from="right"
       delay={0.1}
       action={
@@ -29,7 +32,7 @@ export function OrdersPanel() {
             ))}
           </select>
           <button className="btn" onClick={() => addOrder(plan.week, newProduct)}>
-            + order
+            {t('orders.add')}
           </button>
         </span>
       }
@@ -37,12 +40,12 @@ export function OrdersPanel() {
       <table className="grid">
         <thead>
           <tr>
-            <th>order</th>
-            <th>product</th>
-            <th className="num">kg</th>
-            <th className="num">NOK/kg</th>
-            <th className="num">raw kg</th>
-            <th>pattern / coverage</th>
+            <th>{t('orders.order')}</th>
+            <th>{t('orders.product')}</th>
+            <th className="num">{t('orders.kg')}</th>
+            <th className="num">{t('orders.nokKg')}</th>
+            <th className="num">{t('orders.rawKg')}</th>
+            <th>{t('orders.pattern')}</th>
             <th />
           </tr>
         </thead>
@@ -55,17 +58,17 @@ export function OrdersPanel() {
                 <td>
                   {l.order.orderNo}
                   <br />
-                  <em className="kind">{l.kind}</em>
+                  <em className="kind">{kindLabel(lang, l.kind)}</em>
                 </td>
                 <td>
-                  <select className="field" value={l.order.product} onChange={(e) => setOrder(l.order.orderNo, { product: e.target.value })} title={productName(l.order.product)}>
+                  <select className="field" value={l.order.product} onChange={(e) => setOrder(l.order.orderNo, { product: e.target.value })} title={productName(lang, l.order.product)}>
                     {ORDERABLE.map((p) => (
                       <option key={p} value={p}>
                         {p}
                       </option>
                     ))}
                   </select>
-                  {l.cumYield !== undefined && <em className="kind">yield {pct(l.cumYield)}</em>}
+                  {l.cumYield !== undefined && <em className="kind">{t('orders.yield', { pct: pct(l.cumYield) })}</em>}
                 </td>
                 <td className="num">
                   <NumberField value={l.order.kg} step={50} onChange={(v) => setOrder(l.order.orderNo, { kg: v })} className="w-80" />
@@ -78,17 +81,17 @@ export function OrdersPanel() {
                     onChange={(v) => setOrder(l.order.orderNo, { pricePerKg: v })}
                     className="w-80"
                   />
-                  {value?.priced === 'DERIVED' && <em className="kind">derived</em>}
+                  {value?.priced === 'DERIVED' && <em className="kind">{t('orders.derived')}</em>}
                 </td>
                 <td className="num">{l.kind === 'CUT' ? n0(l.rawKg) : l.coverage && l.coverage.extraRawKg > 0.5 ? `+${n0(l.coverage.extraRawKg)}` : '–'}</td>
                 <td className="path">
                   {l.kind === 'CUT' && pathText(l)}
-                  {l.coverage && `${n0(l.coverage.fromCoProduct)} kg from co-product${l.coverage.shortfall > 0.5 ? ` · ${n0(l.coverage.shortfall)} kg short` : ''}`}
-                  {l.kind === 'UNRESOLVED' && 'not in the cut pattern'}
+                  {l.coverage && `${t('orders.fromCoProduct', { kg: n0(l.coverage.fromCoProduct) })}${l.coverage.shortfall > 0.5 ? ` · ${t('orders.kgShort', { kg: n0(l.coverage.shortfall) })}` : ''}`}
+                  {l.kind === 'UNRESOLVED' && t('orders.notInPattern')}
                   {l.flags.length > 0 && <span className="flags">{l.flags.map((f) => <Flag key={f} flag={f} />)}</span>}
                 </td>
                 <td>
-                  <button className="x" onClick={() => removeOrder(l.order.orderNo)} aria-label="Remove order">
+                  <button className="x" onClick={() => removeOrder(l.order.orderNo)} aria-label={t('orders.remove')}>
                     ×
                   </button>
                 </td>
@@ -98,7 +101,7 @@ export function OrdersPanel() {
           {plan.lines.length === 0 && (
             <tr>
               <td colSpan={7} className="path">
-                No orders this week — add one above.
+                {t('orders.empty')}
               </td>
             </tr>
           )}
@@ -107,16 +110,16 @@ export function OrdersPanel() {
 
       {plan.byproducts.length > 0 && (
         <table className="grid small">
-          <caption>By-product coverage · joint across products</caption>
+          <caption>{t('orders.coverage.caption')}</caption>
           <thead>
             <tr>
-              <th>product</th>
-              <th className="num">demand</th>
-              <th className="num">co-product</th>
-              <th className="num">short</th>
-              <th className="num">from extra fish</th>
-              <th className="num">extra raw</th>
-              <th>falls to</th>
+              <th>{t('orders.product')}</th>
+              <th className="num">{t('orders.coverage.demand')}</th>
+              <th className="num">{t('orders.coverage.coProduct')}</th>
+              <th className="num">{t('orders.coverage.short')}</th>
+              <th className="num">{t('orders.coverage.fromExtra')}</th>
+              <th className="num">{t('orders.coverage.extraRaw')}</th>
+              <th>{t('orders.coverage.fallsTo')}</th>
             </tr>
           </thead>
           <tbody>
@@ -128,7 +131,7 @@ export function OrdersPanel() {
                 <td className="num">{b.shortfallKg > 0.5 ? n0(b.shortfallKg) : '–'}</td>
                 <td className="num">{b.coveredByExtraFishKg > 0.5 ? n0(b.coveredByExtraFishKg) : '–'}</td>
                 <td className="num">{b.extraRawKg > 0.5 ? n0(b.extraRawKg) : '–'}</td>
-                <td>{b.fallsTo ?? (b.coveredByExtraFishKg > 0.5 ? <em className="kind">covered by other extra fish</em> : '')}</td>
+                <td>{b.fallsTo ?? (b.coveredByExtraFishKg > 0.5 ? <em className="kind">{t('orders.coverage.coveredByOther')}</em> : '')}</td>
               </tr>
             ))}
           </tbody>
@@ -137,21 +140,21 @@ export function OrdersPanel() {
 
       <dl className="summary">
         <div>
-          <dt>Revenue</dt>
+          <dt>{t('orders.revenue')}</dt>
           <dd>{kr(finance.revenueNok)} NOK</dd>
         </div>
         {finance.revenueAtRiskNok > 0 && (
           <div className="bad">
-            <dt>At risk</dt>
+            <dt>{t('orders.atRisk')}</dt>
             <dd>{kr(finance.revenueAtRiskNok)} NOK</dd>
           </div>
         )}
         <div>
-          <dt>Residual worth</dt>
+          <dt>{t('orders.residualWorth')}</dt>
           <dd>{kr(finance.residualNok)} NOK</dd>
         </div>
         <div className={finance.marginNok < 0 ? 'bad' : ''}>
-          <dt>Margin</dt>
+          <dt>{t('orders.margin')}</dt>
           <dd>{kr(finance.marginNok)} NOK</dd>
         </div>
       </dl>

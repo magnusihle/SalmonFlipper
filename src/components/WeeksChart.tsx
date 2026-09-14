@@ -2,6 +2,7 @@ import { usePlan } from '../planner/usePlan'
 import { useStore } from '../store'
 import { kr, n0, shortWeek } from '../format'
 import { Card } from './ui'
+import { useT } from '../i18n'
 
 const W = 520
 const H = 240
@@ -12,6 +13,7 @@ export function WeeksChart() {
   const { weeks } = usePlan()
   const week = useStore((s) => s.week)
   const selectWeek = useStore((s) => s.selectWeek)
+  const t = useT()
   const innerW = W - M.l - M.r
   const innerH = H - M.t - M.b
   const slot = innerW / Math.max(1, weeks.length)
@@ -21,13 +23,13 @@ export function WeeksChart() {
 
   return (
     <Card
-      eyebrow="All weeks"
-      title="Raw required vs supply"
+      eyebrow={t('chart.eyebrow')}
+      title={t('chart.title')}
       from="bottom"
       delay={0.2}
       action={
         <span className="legend-mini">
-          <i className="sw cut" /> CUT raw <i className="sw extra" /> extra fish <i className="sw supply" /> supply
+          <i className="sw cut" /> {t('chart.cutRaw')} <i className="sw extra" /> {t('chart.extraFish')} <i className="sw supply" /> {t('chart.supply')}
         </span>
       }
     >

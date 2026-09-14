@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
+import { flagLabel, useLang } from '../i18n'
 
 type From = 'left' | 'right' | 'top' | 'bottom'
 const OFFSET: Record<From, { x: number; y: number }> = { left: { x: -36, y: 0 }, right: { x: 36, y: 0 }, top: { x: 0, y: -18 }, bottom: { x: 0, y: 36 } }
@@ -47,7 +48,8 @@ export function Card({
 
 export function Flag({ flag }: { flag: string }) {
   const tone = flag === 'OK' ? 'ok' : flag === 'CANNOT BE MET' || flag === 'UNRESOLVED' || flag === 'OVER CAPACITY' ? 'bad' : 'warn'
-  return <span className={`flag ${tone}`}>{flag}</span>
+  const lang = useLang()
+  return <span className={`flag ${tone}`}>{flagLabel(lang, flag)}</span>
 }
 
 /** Number input that lets the user type freely and commits every finite value. */
