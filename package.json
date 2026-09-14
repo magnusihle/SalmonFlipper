@@ -1,7 +1,7 @@
 {
-  "name": "mesh_claude_5.1",
+  "name": "salmon-cuts",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "engines": {
     "node": ">=18"
@@ -12,7 +12,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run && npm run test:scripts",
-    "test:scripts": "node --test scripts/test/*.test.mjs test/*.test.mjs"
+    "test:scripts": "node --test scripts/test/*.test.mjs test/*.test.mjs",
+    "electron:dev": "VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron .",
+    "dist": "npm run build && electron-builder --publish never"
   },
   "dependencies": {
     "@react-spring/three": "^10.0.1",
@@ -29,8 +31,103 @@
     "@types/react-dom": "~19.2.0",
     "@types/three": "^0.175.0",
     "@vitejs/plugin-react": "^4.3.0",
+    "electron": "^44.3.0",
+    "electron-builder": "^26.15.3",
     "typescript": "^5.7.0",
     "vite": "^6.0.0",
     "vitest": "^3.2.7"
-  }
+  },
+  "description": "The Ultimate Salmon Cuts: an interactive 3D cutting chart and weekly cutting planner.",
+  "main": "electron/main.cjs",
+  "build": {
+    "appId": "com.salmonflipper.salmoncuts",
+    "productName": "Salmon Cuts",
+    "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**",
+      "electron/**",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.food-and-drink",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "linux": {
+      "category": "Utility",
+      "maintainer": "SalmonFlipper",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "syncDesktopName": true
+    }
+  },
+  "desktopName": "salmon-cuts.desktop"
 }

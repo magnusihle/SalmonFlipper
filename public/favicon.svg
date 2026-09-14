@@ -10,6 +10,6 @@
   <rect class="paper" width="64" height="64" rx="14"/>
   <path class="water" d="M0 44 Q16 38 32 44 T64 44 V50 Q48 56 32 50 T0 50 Z" opacity=".9"/>
   <path fill="#ea6a31" d="M8 32 C14 20 30 16 44 22 L56 14 L53 30 L56 46 L44 38 C30 44 14 40 8 32 Z"/>
-  <path fill="#c9511f" d="M20 25 C24 29 24 35 20 39 M28 23 C32 29 32 35 28 41 M36 24 C40 29 40 35 36 40" stroke="#c9511f" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M20 25 C24 29 24 35 20 39 M28 23 C32 29 32 35 28 41 M36 24 C40 29 40 35 36 40" fill="none" stroke="#c9511f" stroke-width="2" stroke-linecap="round"/>
   <circle cx="16" cy="29" r="2.4" fill="#2a2521"/>
 </svg>
