@@ -95,6 +95,7 @@ function WeekCard({ plan, balance }: { plan: WeekPlan; balance: MassBalance }) {
               <th className="num">demand</th>
               <th className="num">output</th>
               <th className="num">shortfall</th>
+              <th className="num">from extra fish</th>
               <th className="num">extra raw</th>
               <th>falls to residual</th>
             </tr>
@@ -106,6 +107,7 @@ function WeekCard({ plan, balance }: { plan: WeekPlan; balance: MassBalance }) {
                 <td className="num">{n0(b.demandKg)}</td>
                 <td className="num">{n0(b.outputKg)}</td>
                 <td className="num">{b.shortfallKg > 0.5 ? n0(b.shortfallKg) : '–'}</td>
+                <td className="num">{b.coveredByExtraFishKg > 0.5 ? n0(b.coveredByExtraFishKg) : '–'}</td>
                 <td className="num">{b.extraRawKg > 0.5 ? n0(b.extraRawKg) : '–'}</td>
                 <td>{b.fallsTo ?? ''}</td>
               </tr>
