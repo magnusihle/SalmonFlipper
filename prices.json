@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-14T17:55:44.215Z",
+  "fetchedAt": "2026-09-14T18:13:06.803Z",
   "series": [
     {
       "source": "SSB 03024",
@@ -11,16 +11,443 @@
         "HOG"
       ],
       "note": "Weekly export price of Norwegian farmed salmon, whole fish basis. Published Wednesdays 08:00 CET."
+    },
+    {
+      "source": "NSC weekly export statistics",
+      "label": "Norwegian Seafood Council, open weekly export statistics, salmon and trout (ukestat-laks-og-orret)",
+      "url": "https://en.seafood.no/globalassets/markedsinnsikt/apne-rapporter/ukestatistikk/<year>/uke-<week>/ukestat-laks-og-orret-uke-<week>.xlsx",
+      "unit": "NOK/kg",
+      "products": [
+        {
+          "product": "FILLET_FRESH",
+          "label": "Fresh salmon fillet, all trims, export average"
+        },
+        {
+          "product": "FILLET_FROZEN",
+          "label": "Frozen salmon fillet, export average"
+        },
+        {
+          "product": "HEADLESS_FRESH",
+          "label": "Fresh whole salmon, head off"
+        },
+        {
+          "product": "HEADLESS_FROZEN",
+          "label": "Frozen whole salmon, head off / edible by-products"
+        },
+        {
+          "product": "HOG_NSC",
+          "label": "Fresh whole salmon, export average (cross-check against SSB HOG)"
+        }
+      ],
+      "weeksFetched": [
+        "2026-W36",
+        "2026-W35",
+        "2026-W34",
+        "2026-W33",
+        "2026-W32",
+        "2026-W31",
+        "2026-W30",
+        "2026-W29",
+        "2026-W28",
+        "2026-W27",
+        "2026-W26",
+        "2026-W25"
+      ],
+      "note": "FOB Norwegian border, all destinations (TOTALT row). Fillet is the export average across trims. Week N is published on the Wednesday of week N+1."
     }
   ],
   "prices": [
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W25",
+      "nokPerKg": 127.31,
+      "volumeTonnes": 2541,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:09.045Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W26",
+      "nokPerKg": 121.91,
+      "volumeTonnes": 2693,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.964Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W27",
+      "nokPerKg": 120.62,
+      "volumeTonnes": 2737,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.934Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W28",
+      "nokPerKg": 164.25,
+      "volumeTonnes": 2680,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.851Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W29",
+      "nokPerKg": 134.28,
+      "volumeTonnes": 2557,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.761Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W30",
+      "nokPerKg": 122.97,
+      "volumeTonnes": 2531,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.727Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W31",
+      "nokPerKg": 122.94,
+      "volumeTonnes": 2682,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.663Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W32",
+      "nokPerKg": 136.03,
+      "volumeTonnes": 2935,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.637Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W33",
+      "nokPerKg": 124,
+      "volumeTonnes": 2741,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.572Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W34",
+      "nokPerKg": 137.53,
+      "volumeTonnes": 2862,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.538Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W35",
+      "nokPerKg": 130.75,
+      "volumeTonnes": 2940,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.490Z"
+    },
+    {
+      "product": "FILLET_FRESH",
+      "week": "2026-W36",
+      "nokPerKg": 131.87,
+      "volumeTonnes": 2991,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.460Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W25",
+      "nokPerKg": 128.9,
+      "volumeTonnes": 1522,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:09.045Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W26",
+      "nokPerKg": 131.24,
+      "volumeTonnes": 1688,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.964Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W27",
+      "nokPerKg": 133.93,
+      "volumeTonnes": 1531,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.934Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W28",
+      "nokPerKg": 136.3,
+      "volumeTonnes": 1021,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.851Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W29",
+      "nokPerKg": 174.32,
+      "volumeTonnes": 1170,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.761Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W30",
+      "nokPerKg": 134.59,
+      "volumeTonnes": 1396,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.727Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W31",
+      "nokPerKg": 125.34,
+      "volumeTonnes": 1391,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.663Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W32",
+      "nokPerKg": 127.87,
+      "volumeTonnes": 1245,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.637Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W33",
+      "nokPerKg": 130.97,
+      "volumeTonnes": 1710,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.572Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W34",
+      "nokPerKg": 130.84,
+      "volumeTonnes": 1852,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.538Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W35",
+      "nokPerKg": 127.39,
+      "volumeTonnes": 1773,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.490Z"
+    },
+    {
+      "product": "FILLET_FROZEN",
+      "week": "2026-W36",
+      "nokPerKg": 123.14,
+      "volumeTonnes": 2254,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.460Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W25",
+      "nokPerKg": 17.15,
+      "volumeTonnes": 10,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:09.045Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W26",
+      "nokPerKg": 27.23,
+      "volumeTonnes": 6,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.964Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W27",
+      "nokPerKg": 32.06,
+      "volumeTonnes": 3,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.934Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W28",
+      "nokPerKg": 31.92,
+      "volumeTonnes": 4,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.851Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W29",
+      "nokPerKg": 27.46,
+      "volumeTonnes": 2,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.761Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W30",
+      "nokPerKg": 26.88,
+      "volumeTonnes": 6,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.727Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W31",
+      "nokPerKg": 19.41,
+      "volumeTonnes": 3,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.663Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W32",
+      "nokPerKg": 26.94,
+      "volumeTonnes": 7,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.637Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W33",
+      "nokPerKg": 10.45,
+      "volumeTonnes": 7,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.572Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W34",
+      "nokPerKg": 24.2,
+      "volumeTonnes": 9,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.538Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W35",
+      "nokPerKg": 18.59,
+      "volumeTonnes": 10,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.490Z"
+    },
+    {
+      "product": "HEADLESS_FRESH",
+      "week": "2026-W36",
+      "nokPerKg": 22,
+      "volumeTonnes": 8,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.460Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W25",
+      "nokPerKg": 28.73,
+      "volumeTonnes": 129,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:09.045Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W26",
+      "nokPerKg": 21.92,
+      "volumeTonnes": 164,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.964Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W27",
+      "nokPerKg": 17.2,
+      "volumeTonnes": 99,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.934Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W28",
+      "nokPerKg": 15.6,
+      "volumeTonnes": 138,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.851Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W29",
+      "nokPerKg": 20.21,
+      "volumeTonnes": 133,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.761Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W30",
+      "nokPerKg": 17.99,
+      "volumeTonnes": 181,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.727Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W31",
+      "nokPerKg": 14.77,
+      "volumeTonnes": 145,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.663Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W32",
+      "nokPerKg": 28.89,
+      "volumeTonnes": 84,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.637Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W33",
+      "nokPerKg": 19.02,
+      "volumeTonnes": 84,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.572Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W34",
+      "nokPerKg": 25.42,
+      "volumeTonnes": 218,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.538Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W35",
+      "nokPerKg": 30.28,
+      "volumeTonnes": 195,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.490Z"
+    },
+    {
+      "product": "HEADLESS_FROZEN",
+      "week": "2026-W36",
+      "nokPerKg": 26.94,
+      "volumeTonnes": 295,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.460Z"
+    },
     {
       "product": "HOG",
       "week": "2026-W25",
       "nokPerKg": 70.31,
       "volumeTonnes": 25866,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -28,7 +455,7 @@
       "nokPerKg": 68.14,
       "volumeTonnes": 26564,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -36,7 +463,7 @@
       "nokPerKg": 67.31,
       "volumeTonnes": 26491,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -44,7 +471,7 @@
       "nokPerKg": 69.54,
       "volumeTonnes": 26117,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -52,7 +479,7 @@
       "nokPerKg": 69.64,
       "volumeTonnes": 28165,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -60,7 +487,7 @@
       "nokPerKg": 71.31,
       "volumeTonnes": 25822,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -68,7 +495,7 @@
       "nokPerKg": 73.57,
       "volumeTonnes": 26958,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -76,7 +503,7 @@
       "nokPerKg": 74.9,
       "volumeTonnes": 28602,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -84,7 +511,7 @@
       "nokPerKg": 72.66,
       "volumeTonnes": 28762,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -92,7 +519,7 @@
       "nokPerKg": 73.52,
       "volumeTonnes": 31378,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -100,7 +527,7 @@
       "nokPerKg": 71.87,
       "volumeTonnes": 30487,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
     },
     {
       "product": "HOG",
@@ -108,7 +535,103 @@
       "nokPerKg": 69.71,
       "volumeTonnes": 30798,
       "source": "SSB 03024",
-      "fetchedAt": "2026-09-14T17:55:44.215Z"
+      "fetchedAt": "2026-09-14T18:13:07.516Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W25",
+      "nokPerKg": 70.33,
+      "volumeTonnes": 26012,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:09.045Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W26",
+      "nokPerKg": 68.1,
+      "volumeTonnes": 26661,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.964Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W27",
+      "nokPerKg": 67.65,
+      "volumeTonnes": 26681,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.934Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W28",
+      "nokPerKg": 70.56,
+      "volumeTonnes": 26148,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.851Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W29",
+      "nokPerKg": 69.84,
+      "volumeTonnes": 28300,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.761Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W30",
+      "nokPerKg": 71.31,
+      "volumeTonnes": 25858,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.727Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W31",
+      "nokPerKg": 73.58,
+      "volumeTonnes": 27084,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.663Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W32",
+      "nokPerKg": 76,
+      "volumeTonnes": 28704,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.637Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W33",
+      "nokPerKg": 73.74,
+      "volumeTonnes": 28887,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.572Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W34",
+      "nokPerKg": 73.57,
+      "volumeTonnes": 31535,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.538Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W35",
+      "nokPerKg": 72.02,
+      "volumeTonnes": 30500,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.490Z"
+    },
+    {
+      "product": "HOG_NSC",
+      "week": "2026-W36",
+      "nokPerKg": 71.98,
+      "volumeTonnes": 30863,
+      "source": "NSC weekly export statistics",
+      "fetchedAt": "2026-09-14T18:13:08.460Z"
     }
   ]
 }
