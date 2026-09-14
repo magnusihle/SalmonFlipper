@@ -1,4 +1,5 @@
 import { Canvas } from '@react-three/fiber'
+import { AnimatePresence } from 'framer-motion'
 import { Scene } from './three/Salmon'
 import { Header } from './components/Header'
 import { Legend } from './components/Legend'
@@ -9,8 +10,9 @@ import { useStore } from './store'
 
 export default function App() {
   const clear = useStore((s) => s.clear)
+  const board = useStore((s) => s.board)
   return (
-    <div className="app">
+    <div className={`app${board ? ' board-on' : ''}`}>
       <div className="stage">
         <Canvas
           camera={{ position: [0.35, 0.5, 3.3], fov: 32 }}
@@ -21,11 +23,12 @@ export default function App() {
           <Scene />
         </Canvas>
       </div>
-      <Header />
+      {/* the poster text leaves when the board comes in */}
+      <AnimatePresence>{!board && <Header key="header" />}</AnimatePresence>
       <Toolbar />
-      <InfoPanel />
+      <AnimatePresence>{!board && <InfoPanel key="info" />}</AnimatePresence>
       <Board />
-      <Legend />
+      <AnimatePresence>{!board && <Legend key="legend" />}</AnimatePresence>
     </div>
   )
 }

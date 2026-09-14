@@ -19,7 +19,7 @@ export function Toolbar() {
   const toggleBoard = useStore((s) => s.toggleBoard)
   return (
     <motion.div className="toolbar" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 0.6 }}>
-      <span className="hint">drag to orbit · click a cut</span>
+      <span className="hint">{board ? 'click a cut for its plan' : 'drag to orbit · click a cut'}</span>
       <Switch on={exploded} onClick={toggle} label="Exploded view" />
       <Switch on={board} onClick={toggleBoard} label="Plan board" />
     </motion.div>

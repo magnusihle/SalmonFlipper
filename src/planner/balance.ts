@@ -1,6 +1,6 @@
 import type { Graph } from './graph'
 import { LOSS, ROOT } from './types'
-import type { WeekPlan } from './rollup'
+import type { RawPull, WeekPlan } from './rollup'
 
 export type SplitBalance = {
   parent: string
@@ -30,6 +30,32 @@ export type MassBalance = {
   totalOutKg: number
   lossKg: number
   unallocatedRawKg: number
+}
+
+export function productKind(g: Graph, product: string): ProductBalance['kind'] {
+  return product === LOSS ? 'LOSS' : product === ROOT || g.cutParent.has(product) ? 'CUT' : 'BYPRODUCT'
+}
+
+/**
+ * Push one raw pull down its path on its own. Returns the kg landing on every terminal product
+ * (by-products and loss along the way, the CUT product at the end). Used to draw the flow.
+ */
+export function pushPull(g: Graph, pull: RawPull): Map<string, number> {
+  const outputs = new Map<string, number>()
+  const add = (k: string, v: number) => outputs.set(k, (outputs.get(k) ?? 0) + v)
+  let kg = pull.rawKg
+  for (const step of pull.path) {
+    const group = g.splits.get(step.parent)?.get(step.option) ?? []
+    let next = 0
+    for (const e of group) {
+      const childKg = kg * e.yieldOfParent
+      if (e.kind === 'CUT') next = childKg
+      else add(e.child, childKg)
+    }
+    kg = next
+  }
+  add(pull.endProduct, kg)
+  return outputs
 }
 
 /** Step 5 — push every raw pull down its path and account for every kg. */
@@ -65,7 +91,7 @@ export function massBalance(g: Graph, plan: WeekPlan): MassBalance {
 
   const products: ProductBalance[] = [...output.entries()]
     .map(([product, outputKg]) => {
-      const kind: ProductBalance['kind'] = product === LOSS ? 'LOSS' : product === ROOT || g.cutParent.has(product) ? 'CUT' : 'BYPRODUCT'
+      const kind = productKind(g, product)
       const orderedKg = ordered.get(product) ?? 0
       return { product, kind, outputKg, orderedKg, residualKg: kind === 'LOSS' ? 0 : outputKg - orderedKg }
     })

@@ -21,6 +21,10 @@ export interface CutInfo {
   richness: number
   /** where the label sits in the legend row, left → right */
   order: number
+  /** product codes in the deboning graph this piece ends up in, most relevant first */
+  products: string[]
+  /** how the plant treats this piece */
+  plant: string
 }
 
 export const CUTS: Record<CutId, CutInfo> = {
@@ -32,6 +36,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Stock & broth', 'Roast whole', 'Kabutoyaki'],
     richness: 3,
     order: 0,
+    products: ['HEAD', 'HOG'],
+    plant: 'Comes off at heading — 11% of every head-on gutted fish. Sold whole on the fish when the order is HOG.',
   },
   cheek: {
     id: 'cheek',
@@ -41,6 +47,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Pan-sear', 'Confit'],
     richness: 3,
     order: 1,
+    products: ['HEAD'],
+    plant: 'The plant does not cut cheeks; they leave with the head at heading.',
   },
   collar: {
     id: 'collar',
@@ -51,6 +59,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Grill', 'Broil with salt', 'Shio-yaki'],
     richness: 5,
     order: 2,
+    products: ['FRAME', 'HEADLESS'],
+    plant: 'Stays on the frame when the fillets are lifted — it is not a product of its own in the cut pattern.',
   },
   upperFillet: {
     id: 'upperFillet',
@@ -60,6 +70,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Sashimi', 'Slow roast', 'Cure'],
     richness: 3,
     order: 3,
+    products: ['FILLET_A', 'TRIM_C', 'TRIM_D'],
+    plant: 'The front of the Trim A fillet. Trimming to C or D keeps it skin-on and pin-bone-out.',
   },
   loin: {
     id: 'loin',
@@ -69,6 +81,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Pan-roast', 'Sous vide', 'Cure'],
     richness: 3,
     order: 4,
+    products: ['TRIM_D', 'PORTION_E', 'TRIM_C'],
+    plant: 'The centre of the fillet is where portions are cut from — the Trim E → portion line.',
   },
   fillet: {
     id: 'fillet',
@@ -78,6 +92,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Poach', 'Hot smoke', 'Pan-fry'],
     richness: 2,
     order: 5,
+    products: ['TRIM_E', 'PORTION_E', 'TRIM_C'],
+    plant: 'Skinless Trim E is the fillet with the skin taken off; the skin becomes its own by-product.',
   },
   steak: {
     id: 'steak',
@@ -87,6 +103,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Grill', 'Griddle', 'Bake'],
     richness: 3,
     order: 6,
+    products: ['HEADLESS'],
+    plant: 'Cut straight across the head-off gutted fish, before filleting — so it bypasses the fillet table.',
   },
   tail: {
     id: 'tail',
@@ -96,6 +114,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Gravlax', 'Grill', 'Fish cakes'],
     richness: 1,
     order: 7,
+    products: ['MINCE', 'TRIM_E'],
+    plant: 'The thin tail end is trimmed off and goes to mince — the residual sink of the pattern.',
   },
   belly: {
     id: 'belly',
@@ -105,6 +125,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Broil', 'Tare glaze', 'Skewers'],
     richness: 5,
     order: 8,
+    products: ['BELLY_FLAP'],
+    plant: 'Comes off at trimming: 7% of the fillet on the C pattern, 9% on D and E — the if/or yield.',
   },
   toro: {
     id: 'toro',
@@ -115,6 +137,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Sashimi', 'Nigiri', 'Aburi'],
     richness: 5,
     order: 9,
+    products: ['BELLY_FLAP', 'TRIM_C'],
+    plant: 'On the C trim the belly stays on the fillet; on D and E it is trimmed into the belly flap.',
   },
   spine: {
     id: 'spine',
@@ -124,6 +148,8 @@ export const CUTS: Record<CutId, CutInfo> = {
     bestFor: ['Dashi', 'Roast crisp', 'Nakaochi'],
     richness: 2,
     order: 10,
+    products: ['FRAME'],
+    plant: 'The frame: 18% of the head-off fish after the fillets are lifted.',
   },
 }
 

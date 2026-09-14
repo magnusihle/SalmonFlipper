@@ -11,6 +11,7 @@ export function Header() {
       className="header"
       initial="hidden"
       animate="show"
+      exit={{ opacity: 0, y: -24, scale: 0.96, transition: { duration: 0.28 } }}
       variants={{ show: { transition: { staggerChildren: 0.14 } } }}
     >
       <motion.p className="overline" variants={rise}>

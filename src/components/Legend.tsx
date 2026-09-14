@@ -13,6 +13,7 @@ export function Legend() {
       className="legend"
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 28, transition: { duration: 0.25 } }}
       transition={{ delay: 0.7, duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
     >
       {CUT_ORDER.map((id, i) => {

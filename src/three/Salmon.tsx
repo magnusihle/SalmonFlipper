@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import { ContactShadows, Environment, Lightformer, OrbitControls } from '@react-three/drei'
@@ -41,6 +41,9 @@ function Eye({ side }: { side: 1 | -1 }) {
 export function Salmon() {
   const group = useRef<THREE.Group>(null)
   const selected = useStore((s) => s.selected)
+  const board = useStore((s) => s.board)
+  // on the board the fish zooms out: it shrinks and lifts into the middle cell
+  const zoom = useRef({ scale: 1, lift: 0 })
 
   const geo = useMemo(
     () => ({
@@ -62,14 +65,18 @@ export function Salmon() {
   )
 
   // idle sway — a fish at rest is never quite still
-  useFrame(({ clock }) => {
+  useFrame(({ clock }, dt) => {
     const g = group.current
     if (!g) return
     const t = clock.elapsedTime
     const amp = selected ? 0.4 : 1
+    const z = zoom.current
+    z.scale = THREE.MathUtils.damp(z.scale, board ? 0.62 : 1, 3.5, dt)
+    z.lift = THREE.MathUtils.damp(z.lift, board ? 0.22 : 0, 3.5, dt)
+    g.scale.setScalar(z.scale)
     g.rotation.y = Math.sin(t * 0.45) * 0.06 * amp
     g.rotation.z = Math.sin(t * 0.7) * 0.012 * amp
-    g.position.y = -0.04 + Math.sin(t * 1.1) * 0.014 * amp
+    g.position.y = -0.04 + z.lift + Math.sin(t * 1.1) * 0.014 * amp
   })
 
   const pecX = -0.5
@@ -138,12 +145,26 @@ export function Salmon() {
 function CameraRig() {
   const controls = useRef<OrbitControlsImpl>(null)
   const selected = useStore((s) => s.selected)
+  const board = useStore((s) => s.board)
+  // dolly the camera out for ~2 s after the board toggles, then hand distance back to the user
+  const dolly = useRef({ until: 0, goal: 3.3 })
+  useEffect(() => {
+    dolly.current = { until: performance.now() + 2000, goal: board ? 4.4 : 3.3 }
+  }, [board])
   useFrame((_, dt) => {
     const c = controls.current
     if (!c) return
+    const k = board ? 0.62 : 1
     const target = selected ? LAYOUT[selected].center : [0, 0, 0]
-    c.target.x = THREE.MathUtils.damp(c.target.x, target[0] * 0.45, 3, dt)
-    c.target.y = THREE.MathUtils.damp(c.target.y, target[1] * 0.45, 3, dt)
+    c.target.x = THREE.MathUtils.damp(c.target.x, target[0] * 0.45 * k, 3, dt)
+    c.target.y = THREE.MathUtils.damp(c.target.y, target[1] * 0.45 * k, 3, dt)
+    if (performance.now() < dolly.current.until) {
+      const cam = c.object
+      const dir = cam.position.clone().sub(c.target)
+      const len = dir.length() || 1
+      const next = THREE.MathUtils.damp(len, dolly.current.goal, 3, dt)
+      cam.position.copy(c.target).add(dir.multiplyScalar(next / len))
+    }
     c.update()
   })
   return (
@@ -151,7 +172,7 @@ function CameraRig() {
       ref={controls}
       enablePan={false}
       minDistance={1.8}
-      maxDistance={5}
+      maxDistance={6}
       minPolarAngle={0.55}
       maxPolarAngle={2.0}
       enableDamping
