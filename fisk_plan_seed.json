@@ -1,0 +1,267 @@
+{
+  "species": "Atlantic salmon (placeholder yields, replace with cut test)",
+  "edges": [
+    {
+      "parent": "ROUND",
+      "child": "HOG",
+      "option": "-",
+      "yieldOfParent": 0.88,
+      "kind": "CUT"
+    },
+    {
+      "parent": "ROUND",
+      "child": "VISCERA",
+      "option": "-",
+      "yieldOfParent": 0.11,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "ROUND",
+      "child": "LOSS",
+      "option": "-",
+      "yieldOfParent": 0.01,
+      "kind": "LOSS"
+    },
+    {
+      "parent": "HOG",
+      "child": "HEADLESS",
+      "option": "-",
+      "yieldOfParent": 0.89,
+      "kind": "CUT"
+    },
+    {
+      "parent": "HOG",
+      "child": "HEAD",
+      "option": "-",
+      "yieldOfParent": 0.11,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "HEADLESS",
+      "child": "FILLET_A",
+      "option": "-",
+      "yieldOfParent": 0.8,
+      "kind": "CUT"
+    },
+    {
+      "parent": "HEADLESS",
+      "child": "FRAME",
+      "option": "-",
+      "yieldOfParent": 0.18,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "HEADLESS",
+      "child": "LOSS",
+      "option": "-",
+      "yieldOfParent": 0.02,
+      "kind": "LOSS"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "TRIM_C",
+      "option": "C",
+      "yieldOfParent": 0.88,
+      "kind": "CUT"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "BELLY_FLAP",
+      "option": "C",
+      "yieldOfParent": 0.07,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "MINCE",
+      "option": "C",
+      "yieldOfParent": 0.05,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "TRIM_D",
+      "option": "D",
+      "yieldOfParent": 0.84,
+      "kind": "CUT"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "BELLY_FLAP",
+      "option": "D",
+      "yieldOfParent": 0.09,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "MINCE",
+      "option": "D",
+      "yieldOfParent": 0.07,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "TRIM_E",
+      "option": "E",
+      "yieldOfParent": 0.77,
+      "kind": "CUT"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "BELLY_FLAP",
+      "option": "E",
+      "yieldOfParent": 0.09,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "SKIN",
+      "option": "E",
+      "yieldOfParent": 0.07,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "FILLET_A",
+      "child": "MINCE",
+      "option": "E",
+      "yieldOfParent": 0.07,
+      "kind": "BYPRODUCT"
+    },
+    {
+      "parent": "TRIM_E",
+      "child": "PORTION_E",
+      "option": "PORTION",
+      "yieldOfParent": 0.9,
+      "kind": "CUT"
+    },
+    {
+      "parent": "TRIM_E",
+      "child": "MINCE",
+      "option": "PORTION",
+      "yieldOfParent": 0.1,
+      "kind": "BYPRODUCT"
+    }
+  ],
+  "products": [
+    {
+      "code": "ROUND",
+      "name": "Whole round fish"
+    },
+    {
+      "code": "HOG",
+      "name": "Head-on gutted"
+    },
+    {
+      "code": "VISCERA",
+      "name": "Viscera"
+    },
+    {
+      "code": "LOSS",
+      "name": "Process loss"
+    },
+    {
+      "code": "HEADLESS",
+      "name": "Head-off gutted"
+    },
+    {
+      "code": "HEAD",
+      "name": "Head"
+    },
+    {
+      "code": "FILLET_A",
+      "name": "Fillet Trim A (skin-on, bone-in, belly on)"
+    },
+    {
+      "code": "FRAME",
+      "name": "Frame"
+    },
+    {
+      "code": "TRIM_C",
+      "name": "Fillet Trim C (skin-on, PBO, belly trimmed)"
+    },
+    {
+      "code": "TRIM_D",
+      "name": "Fillet Trim D (skin-on, PBO, fully trimmed)"
+    },
+    {
+      "code": "TRIM_E",
+      "name": "Fillet Trim E (skinless, PBO)"
+    },
+    {
+      "code": "BELLY_FLAP",
+      "name": "Belly flap"
+    },
+    {
+      "code": "SKIN",
+      "name": "Skin"
+    },
+    {
+      "code": "MINCE",
+      "name": "Trim / mince (residual sink)"
+    },
+    {
+      "code": "PORTION_E",
+      "name": "Skinless portions"
+    }
+  ],
+  "orders": [
+    {
+      "orderNo": "ORD-001",
+      "week": "2026-W38",
+      "product": "TRIM_C",
+      "kg": 1200
+    },
+    {
+      "orderNo": "ORD-002",
+      "week": "2026-W38",
+      "product": "TRIM_E",
+      "kg": 800
+    },
+    {
+      "orderNo": "ORD-003",
+      "week": "2026-W38",
+      "product": "PORTION_E",
+      "kg": 500
+    },
+    {
+      "orderNo": "ORD-004",
+      "week": "2026-W38",
+      "product": "HEAD",
+      "kg": 300
+    },
+    {
+      "orderNo": "ORD-005",
+      "week": "2026-W39",
+      "product": "TRIM_D",
+      "kg": 2000
+    },
+    {
+      "orderNo": "ORD-006",
+      "week": "2026-W39",
+      "product": "HOG",
+      "kg": 1500
+    },
+    {
+      "orderNo": "ORD-007",
+      "week": "2026-W39",
+      "product": "BELLY_FLAP",
+      "kg": 200
+    },
+    {
+      "orderNo": "ORD-008",
+      "week": "2026-W39",
+      "product": "TRIM_E",
+      "kg": 3000
+    }
+  ],
+  "supply": [
+    {
+      "week": "2026-W38",
+      "rawKg": 6000
+    },
+    {
+      "week": "2026-W39",
+      "rawKg": 8000
+    }
+  ]
+}
