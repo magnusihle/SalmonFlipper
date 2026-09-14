@@ -1,0 +1,20 @@
+{
+  "note": "One PriceRule per product in fisk_plan_seed.json. reference = a series in prices.json; derived = parent price + cost per kg entering the split - by-product credit, over the cut yield (cost from seed.costCenters unless costPerKg is set); manual = hand-entered NOK/kg. All manual values are placeholders from the brief's residualPrices - replace with the plant's own buyer prices.",
+  "rules": [
+    { "product": "HOG", "rule": "reference", "ref": "HOG", "note": "SSB 03024 weekly export price, fresh whole fish" },
+    { "product": "ROUND", "rule": "reference", "ref": "HOG", "note": "Unallocated raw is valued at the HOG reference price (issue #7); swap to seed.rawPrices when the round price should be used instead" },
+    { "product": "HEADLESS", "rule": "derived", "ref": "HOG", "note": "Cost from cost centre HEADING" },
+    { "product": "FILLET_A", "rule": "derived", "ref": "HEADLESS", "note": "Cost from cost centre FILLET. Switch to rule=reference when a Seafood Council fresh-fillet series is in prices.json" },
+    { "product": "TRIM_C", "rule": "derived", "ref": "FILLET_A", "note": "Cost from cost centre TRIM_C" },
+    { "product": "TRIM_D", "rule": "derived", "ref": "FILLET_A", "note": "Cost from cost centre TRIM_D" },
+    { "product": "TRIM_E", "rule": "derived", "ref": "FILLET_A", "note": "Cost from cost centre TRIM_E" },
+    { "product": "PORTION_E", "rule": "derived", "ref": "TRIM_E", "note": "Cost from cost centre PORTION" },
+    { "product": "HEAD", "rule": "manual", "nokPerKg": 6, "note": "Placeholder (brief §8 residualPrices); replace with buyer price" },
+    { "product": "FRAME", "rule": "manual", "nokPerKg": 3, "note": "Placeholder (brief §8 residualPrices); replace with buyer price" },
+    { "product": "BELLY_FLAP", "rule": "manual", "nokPerKg": 20, "note": "Placeholder (brief §8 residualPrices); replace with buyer price" },
+    { "product": "SKIN", "rule": "manual", "nokPerKg": 4, "note": "Placeholder (brief §8 residualPrices); replace with buyer price" },
+    { "product": "MINCE", "rule": "manual", "nokPerKg": 12, "note": "Placeholder (brief §8 residualPrices); replace with buyer price" },
+    { "product": "VISCERA", "rule": "manual", "nokPerKg": 0.5, "note": "Placeholder (brief §8 residualPrices); replace with buyer price" },
+    { "product": "LOSS", "rule": "manual", "nokPerKg": 0, "note": "Process loss has no value" }
+  ]
+}

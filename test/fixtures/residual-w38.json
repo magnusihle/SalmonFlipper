@@ -1,0 +1,12 @@
+{
+  "week": "2026-W38",
+  "unallocatedRawKg": 1014,
+  "rows": [
+    { "product": "HEAD", "kg": 183 },
+    { "product": "FRAME", "kg": 703 },
+    { "product": "BELLY_FLAP", "kg": 189 },
+    { "product": "SKIN", "kg": 123 },
+    { "product": "MINCE", "kg": 241 },
+    { "product": "VISCERA", "kg": 548 }
+  ]
+}
