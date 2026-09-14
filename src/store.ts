@@ -28,11 +28,17 @@ interface State extends PlanSlice {
   /** planner board overlay */
   board: boolean
   priceStatus: PriceStatus
+  /** bumps every time the viewer asks for a trick; the scene picks it up */
+  trickRequest: number
+  /** true while the fish is mid-trick */
+  tricking: boolean
   setHovered: (id: CutId | null) => void
   select: (id: CutId) => void
   clear: () => void
   toggleExploded: () => void
   toggleBoard: () => void
+  doTrick: () => void
+  setTricking: (on: boolean) => void
   selectWeek: (week: string) => void
   addWeek: () => void
   setSupplyKg: (week: string, rawKg: number) => void
@@ -82,6 +88,8 @@ export const useStore = create<State>((set, get) => ({
   exploded: false,
   board: false,
   priceStatus: { state: 'idle', message: '' },
+  trickRequest: 0,
+  tricking: false,
   ...load(),
 
   setHovered: (hovered) => set({ hovered }),
@@ -89,6 +97,9 @@ export const useStore = create<State>((set, get) => ({
   clear: () => set({ selected: null }),
   toggleExploded: () => set((s) => ({ exploded: !s.exploded, selected: null })),
   toggleBoard: () => set((s) => ({ board: !s.board, selected: null })),
+  // a trick needs the whole fish, so it pulls the pieces back together first
+  doTrick: () => set((s) => (s.tricking ? s : { trickRequest: s.trickRequest + 1, tricking: true, selected: null, exploded: false })),
+  setTricking: (tricking) => set({ tricking }),
 
   selectWeek: (week) => set({ week }),
   addWeek: () =>

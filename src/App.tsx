@@ -15,7 +15,7 @@ export default function App() {
     <div className={`app${board ? ' board-on' : ''}`}>
       <div className="stage">
         <Canvas
-          camera={{ position: [0.35, 0.5, 3.3], fov: 32 }}
+          camera={{ position: [0.4, 1.1, 3.2], fov: 32 }}
           gl={{ alpha: true, antialias: true }}
           dpr={[1, 2]}
           onPointerMissed={clear}

@@ -7,6 +7,10 @@ every cut is its own piece, and each one can be hovered and clicked.
 - **Click** a cut → it pops out of the fish, the camera eases toward it and a card describes it.
 - **Exploded view** toggle → every piece separates so you can see the spine.
 - **Drag** to orbit — the far side of the fish still has its skin on.
+- **Do a trick** (or press `T`) → the fish crouches into the pool, leaps, spins (somersault, barrel roll,
+  twist — it cycles) and splashes down.
+- The pool is a small shallow-water simulation (`src/three/ripples.ts`): drips, splashes and droplets all
+  make real rings, and the reflection bends with them.
 
 ## Stack
 
@@ -31,9 +35,12 @@ src/
   store.ts            hovered / selected / exploded
   three/
     geometry.ts       body profile, segment builder, fins, spine
-    textures.ts       procedural flesh + skin canvases
+    textures.ts       procedural flesh + skin canvases (scales, spots, bump map)
     layout.ts         where each cut sits and which way it moves
+    motion.ts         body wave, fin sway and the trick timeline
+    ripples.ts        heightfield water simulation
+    Water.tsx         reflective pool, droplets, drips
     Cut.tsx           one interactive piece: springs, glow, label
-    Salmon.tsx        assembles the fish; lights, camera, shadows
+    Salmon.tsx        assembles the fish; lights, camera
   components/         Header, Legend, InfoPanel, Toolbar
 ```

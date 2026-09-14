@@ -7,10 +7,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { CUTS, type CutId } from '../data/cuts'
 import { LAYOUT } from './layout'
 import { useStore } from '../store'
-import { makeFleshTexture, makeSkinTexture } from './textures'
+import { makeFleshTexture, makeSkinTexture, type SkinTextures } from './textures'
 import { buildSegment, type SegmentSpec } from './geometry'
+import { bodyWave } from './motion'
 
-let textures: { flesh: THREE.Texture; skin: THREE.Texture } | null = null
+let textures: { flesh: THREE.Texture; skin: SkinTextures } | null = null
 function sharedTextures() {
   if (!textures) textures = { flesh: makeFleshTexture(), skin: makeSkinTexture() }
   return textures
@@ -38,7 +39,16 @@ function makeMaterials(): CutMaterials {
     return m
   }
   return {
-    skin: mk({ map: t.skin, roughness: 0.42, metalness: 0.12, envMapIntensity: 1.4, emissive: '#7fb0e0', side: THREE.DoubleSide }),
+    skin: mk({
+      map: t.skin.map,
+      bumpMap: t.skin.bump,
+      bumpScale: 0.35,
+      roughness: 0.32,
+      metalness: 0.18,
+      envMapIntensity: 1.6,
+      emissive: '#7fb0e0',
+      side: THREE.DoubleSide,
+    }),
     flesh: mk({ map: t.flesh, roughness: 0.62, metalness: 0, envMapIntensity: 0.8, emissive: '#ff6a2a', side: THREE.DoubleSide }),
     fin: mk({ color: '#56636f', roughness: 0.5, metalness: 0.25, emissive: '#7fb0e0', transparent: true, opacity: 0.92, side: THREE.DoubleSide }),
     bone: mk({ color: '#efe6d2', roughness: 0.65, metalness: 0, emissive: '#ffd9a0' }),
@@ -83,12 +93,20 @@ export function Cut({ id, children }: { id: CutId; children: ReactNode }) {
 
   const mats = useMemo(makeMaterials, [])
   const tint = useRef(1)
+  const swim = useRef<THREE.Group>(null)
   useFrame((_, dt) => {
     const glow = isSelected ? 0.4 : isHovered ? 0.25 : 0
     tint.current = THREE.MathUtils.damp(tint.current, dimmed ? 0.76 : 1, 7, dt)
     for (const m of Object.values(mats)) {
       m.emissiveIntensity = THREE.MathUtils.damp(m.emissiveIntensity, glow, 9, dt)
       m.color.copy(m.userData.base as THREE.Color).multiplyScalar(tint.current)
+    }
+    // the swimming wave: each rigid piece slides sideways and yaws around its own pivot
+    const s = swim.current
+    if (s) {
+      const w = bodyWave(cx)
+      s.position.z = w.z
+      s.rotation.y = w.yaw
     }
   })
 
@@ -119,8 +137,10 @@ export function Cut({ id, children }: { id: CutId; children: ReactNode }) {
       onPointerOut={onOut}
       onClick={onClick}
     >
-      <group position={[-cx, -cy, -cz]}>
-        <MaterialsCtx.Provider value={mats}>{children}</MaterialsCtx.Provider>
+      <group ref={swim}>
+        <group position={[-cx, -cy, -cz]}>
+          <MaterialsCtx.Provider value={mats}>{children}</MaterialsCtx.Provider>
+        </group>
       </group>
       <Html position={labelPos} center zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
         <AnimatePresence>
