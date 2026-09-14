@@ -209,49 +209,57 @@
       "orderNo": "ORD-001",
       "week": "2026-W38",
       "product": "TRIM_C",
-      "kg": 1200
+      "kg": 1200,
+      "pricePerKg": 135
     },
     {
       "orderNo": "ORD-002",
       "week": "2026-W38",
       "product": "TRIM_E",
-      "kg": 800
+      "kg": 800,
+      "pricePerKg": 165
     },
     {
       "orderNo": "ORD-003",
       "week": "2026-W38",
       "product": "PORTION_E",
-      "kg": 500
+      "kg": 500,
+      "pricePerKg": 195
     },
     {
       "orderNo": "ORD-004",
       "week": "2026-W38",
       "product": "HEAD",
-      "kg": 300
+      "kg": 300,
+      "pricePerKg": 8
     },
     {
       "orderNo": "ORD-005",
       "week": "2026-W39",
       "product": "TRIM_D",
-      "kg": 2000
+      "kg": 2000,
+      "pricePerKg": 145
     },
     {
       "orderNo": "ORD-006",
       "week": "2026-W39",
       "product": "HOG",
-      "kg": 1500
+      "kg": 1500,
+      "pricePerKg": 80
     },
     {
       "orderNo": "ORD-007",
       "week": "2026-W39",
       "product": "BELLY_FLAP",
-      "kg": 200
+      "kg": 200,
+      "pricePerKg": 25
     },
     {
       "orderNo": "ORD-008",
       "week": "2026-W39",
       "product": "TRIM_E",
-      "kg": 3000
+      "kg": 3000,
+      "pricePerKg": 160
     }
   ],
   "supply": [
@@ -263,5 +271,141 @@
       "week": "2026-W39",
       "rawKg": 8000
     }
-  ]
+  ],
+  "rawPrices": [
+    {
+      "week": "2026-W38",
+      "pricePerKgRound": 60.0,
+      "currency": "NOK"
+    },
+    {
+      "week": "2026-W39",
+      "pricePerKgRound": 66.0,
+      "currency": "NOK"
+    }
+  ],
+  "costCenters": [
+    {
+      "code": "GUT",
+      "name": "Gutting",
+      "parent": "ROUND",
+      "option": "-",
+      "costPerKgIn": 2.0,
+      "capacityKgPerDay": 4000,
+      "daysPerWeek": 5
+    },
+    {
+      "code": "HEADING",
+      "name": "Heading",
+      "parent": "HOG",
+      "option": "-",
+      "costPerKgIn": 1.0,
+      "capacityKgPerDay": 4000,
+      "daysPerWeek": 5
+    },
+    {
+      "code": "FILLET",
+      "name": "Filleting",
+      "parent": "HEADLESS",
+      "option": "-",
+      "costPerKgIn": 4.0,
+      "capacityKgPerDay": 2000,
+      "daysPerWeek": 5
+    },
+    {
+      "code": "TRIM_C",
+      "name": "Trimming to C",
+      "parent": "FILLET_A",
+      "option": "C",
+      "costPerKgIn": 3.0,
+      "capacityKgPerDay": 1600,
+      "daysPerWeek": 5
+    },
+    {
+      "code": "TRIM_D",
+      "name": "Trimming to D",
+      "parent": "FILLET_A",
+      "option": "D",
+      "costPerKgIn": 3.5,
+      "capacityKgPerDay": 1600,
+      "daysPerWeek": 5
+    },
+    {
+      "code": "TRIM_E",
+      "name": "Trimming + skinning to E",
+      "parent": "FILLET_A",
+      "option": "E",
+      "costPerKgIn": 5.5,
+      "capacityKgPerDay": 1600,
+      "daysPerWeek": 5
+    },
+    {
+      "code": "PORTION",
+      "name": "Portioning",
+      "parent": "TRIM_E",
+      "option": "PORTION",
+      "costPerKgIn": 6.0,
+      "capacityKgPerDay": 100,
+      "daysPerWeek": 5
+    }
+  ],
+  "residualPrices": [
+    {
+      "product": "HOG",
+      "pricePerKg": 76
+    },
+    {
+      "product": "HEADLESS",
+      "pricePerKg": 82
+    },
+    {
+      "product": "FILLET_A",
+      "pricePerKg": 110
+    },
+    {
+      "product": "TRIM_C",
+      "pricePerKg": 125
+    },
+    {
+      "product": "TRIM_D",
+      "pricePerKg": 135
+    },
+    {
+      "product": "TRIM_E",
+      "pricePerKg": 150
+    },
+    {
+      "product": "PORTION_E",
+      "pricePerKg": 180
+    },
+    {
+      "product": "HEAD",
+      "pricePerKg": 6
+    },
+    {
+      "product": "FRAME",
+      "pricePerKg": 3
+    },
+    {
+      "product": "BELLY_FLAP",
+      "pricePerKg": 20
+    },
+    {
+      "product": "SKIN",
+      "pricePerKg": 4
+    },
+    {
+      "product": "MINCE",
+      "pricePerKg": 12
+    },
+    {
+      "product": "VISCERA",
+      "pricePerKg": 0.5
+    },
+    {
+      "product": "LOSS",
+      "pricePerKg": 0
+    }
+  ],
+  "currency": "NOK"
 }
