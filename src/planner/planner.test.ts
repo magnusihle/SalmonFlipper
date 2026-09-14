@@ -158,3 +158,37 @@ describe('stress test (§7)', () => {
     expect(mb.totalOutKg).toBeCloseTo(mb.rawKg, 6)
   })
 })
+
+describe('by-product coverage is joint and order-independent', () => {
+  const base = SEED.orders.filter((o) => o.week === '2026-W38' && o.product !== 'HEAD')
+  const frame: Order = { orderNo: 'ORD-009', week: '2026-W38', product: 'FRAME', kg: 900 }
+  const head: Order = { orderNo: 'ORD-010', week: '2026-W38', product: 'HEAD', kg: 600 }
+
+  it('extra fish bought for FRAME also cover the HEAD shortfall', () => {
+    const plan = rollupWeek(g, '2026-W38', [...base, frame, head], SEED.supply)
+    const f = plan.byproducts.find((b) => b.product === 'FRAME')!
+    const h = plan.byproducts.find((b) => b.product === 'HEAD')!
+    // FRAME: 197 kg short → 1,398 kg extra fish, which bring 1,398 × 0.88 × 0.11 = 135 kg of HEAD
+    expect(kg(f.shortfallKg)).toBe(197)
+    expect(kg(f.extraRawKg)).toBe(1398)
+    expect(kg(h.outputKg)).toBe(483)
+    expect(kg(h.shortfallKg)).toBe(117)
+    expect(kg(h.coveredByExtraFishKg)).toBe(117)
+    expect(h.extraRawKg).toBe(0)
+    expect(kg(plan.extraRawKg)).toBe(1398)
+    expect(kg(plan.requiredRawKg)).toBe(6384)
+    const mb = massBalance(g, plan)
+    expect(mb.products.find((p) => p.product === 'HEAD')!.residualKg).toBeGreaterThanOrEqual(0)
+    expect(mb.totalOutKg).toBeCloseTo(mb.rawKg, 6)
+  })
+
+  it('the same lines in a different order give the same week', () => {
+    const a = rollupWeek(g, '2026-W38', [...base, frame, head], SEED.supply)
+    const b = rollupWeek(g, '2026-W38', [...base, head, frame], SEED.supply)
+    expect(b.requiredRawKg).toBeCloseTo(a.requiredRawKg, 6)
+    expect(b.extraRawKg).toBeCloseTo(a.extraRawKg, 6)
+    expect(b.pulls.length).toBe(a.pulls.length)
+    const res = (plan: typeof a) => Object.fromEntries(massBalance(g, plan).products.map((p) => [p.product, kg(p.residualKg)]))
+    expect(res(b)).toEqual(res(a))
+  })
+})
