@@ -3,9 +3,12 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "fetch-prices": "node scripts/fetch-prices.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "prices": "node scripts/prices.mjs"
   }
 }
