@@ -1,0 +1,114 @@
+{
+  "fetchedAt": "2026-09-14T17:55:44.215Z",
+  "series": [
+    {
+      "source": "SSB 03024",
+      "label": "03024: Export of salmon, fish-farm bred, by commodity group, contents and week",
+      "url": "https://data.ssb.no/api/v0/en/table/03024",
+      "updated": "2026-09-09T06:00:00Z",
+      "unit": "NOK/kg",
+      "products": [
+        "HOG"
+      ],
+      "note": "Weekly export price of Norwegian farmed salmon, whole fish basis. Published Wednesdays 08:00 CET."
+    }
+  ],
+  "prices": [
+    {
+      "product": "HOG",
+      "week": "2026-W25",
+      "nokPerKg": 70.31,
+      "volumeTonnes": 25866,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W26",
+      "nokPerKg": 68.14,
+      "volumeTonnes": 26564,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W27",
+      "nokPerKg": 67.31,
+      "volumeTonnes": 26491,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W28",
+      "nokPerKg": 69.54,
+      "volumeTonnes": 26117,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W29",
+      "nokPerKg": 69.64,
+      "volumeTonnes": 28165,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W30",
+      "nokPerKg": 71.31,
+      "volumeTonnes": 25822,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W31",
+      "nokPerKg": 73.57,
+      "volumeTonnes": 26958,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W32",
+      "nokPerKg": 74.9,
+      "volumeTonnes": 28602,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W33",
+      "nokPerKg": 72.66,
+      "volumeTonnes": 28762,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W34",
+      "nokPerKg": 73.52,
+      "volumeTonnes": 31378,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W35",
+      "nokPerKg": 71.87,
+      "volumeTonnes": 30487,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    },
+    {
+      "product": "HOG",
+      "week": "2026-W36",
+      "nokPerKg": 69.71,
+      "volumeTonnes": 30798,
+      "source": "SSB 03024",
+      "fetchedAt": "2026-09-14T17:55:44.215Z"
+    }
+  ]
+}

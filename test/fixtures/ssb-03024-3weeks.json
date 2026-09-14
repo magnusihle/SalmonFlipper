@@ -1,0 +1,162 @@
+{
+    "version": "2.0",
+    "class": "dataset",
+    "label": "03024: Export of salmon, fish-farm bred, by commodity group, contents and week",
+    "source": "Statistics Norway",
+    "updated": "2026-09-09T06:00:00Z",
+    "role": {
+        "time": [
+            "Tid"
+        ],
+        "metric": [
+            "ContentsCode"
+        ]
+    },
+    "id": [
+        "VareGrupper2",
+        "ContentsCode",
+        "Tid"
+    ],
+    "size": [
+        2,
+        2,
+        3
+    ],
+    "dimension": {
+        "VareGrupper2": {
+            "label": "commodity group",
+            "category": {
+                "index": {
+                    "01": 0,
+                    "02": 1
+                },
+                "label": {
+                    "01": "Fish-farm bred salmon, fresh or chilled",
+                    "02": "Fish-farm bred salmon, frozen"
+                }
+            },
+            "extension": {
+                "elimination": false,
+                "show": "value"
+            }
+        },
+        "ContentsCode": {
+            "label": "contents",
+            "category": {
+                "index": {
+                    "Vekt": 0,
+                    "Kilopris": 1
+                },
+                "label": {
+                    "Vekt": "Weight (tonnes)",
+                    "Kilopris": "Price per kg (NOK)"
+                },
+                "unit": {
+                    "Vekt": {
+                        "base": "tonnes",
+                        "decimals": 0
+                    },
+                    "Kilopris": {
+                        "base": "NOK",
+                        "decimals": 2
+                    }
+                }
+            },
+            "extension": {
+                "elimination": false,
+                "refperiod": {
+                    "Vekt": "End of week",
+                    "Kilopris": "End of week"
+                },
+                "show": "value",
+                "measuringType": {
+                    "Vekt": "Flow",
+                    "Kilopris": "Flow"
+                },
+                "priceType": {
+                    "Vekt": "NotApplicable",
+                    "Kilopris": "NotApplicable"
+                },
+                "adjustment": {
+                    "Vekt": "None",
+                    "Kilopris": "None"
+                }
+            },
+            "link": {
+                "describedby": [
+                    {
+                        "extension": {
+                            "Vekt": "urn:ssb:conceptvariable:vardok:2982"
+                        }
+                    }
+                ]
+            }
+        },
+        "Tid": {
+            "label": "week",
+            "category": {
+                "index": {
+                    "2026U34": 0,
+                    "2026U35": 1,
+                    "2026U36": 2
+                },
+                "label": {
+                    "2026U34": "2026U34",
+                    "2026U35": "2026U35",
+                    "2026U36": "2026U36"
+                }
+            },
+            "extension": {
+                "elimination": false,
+                "show": "code"
+            }
+        }
+    },
+    "extension": {
+        "px": {
+            "infofile": "None",
+            "tableid": "03024",
+            "decimals": 0,
+            "official-statistics": true,
+            "aggregallowed": false,
+            "copyright": false,
+            "language": "en",
+            "contents": "03024: Export of salmon, fish-farm bred,",
+            "descriptiondefault": false,
+            "heading": [
+                "ContentsCode",
+                "Tid"
+            ],
+            "stub": [
+                "VareGrupper2"
+            ],
+            "matrix": "Vekt",
+            "subject-code": "ut",
+            "subject-area": "External economy"
+        },
+        "discontinued": null,
+        "contact": [
+            {
+                "name": "Utenrikshandel",
+                "organization": "Statistics Norway",
+                "phone": "62 88 50 00",
+                "mail": "utenrikshandel@ssb.no",
+                "raw": " Utenrikshandel, Statistics Norway# +47 62 88 50 00#utenrikshandel@ssb.no"
+            }
+        ]
+    },
+    "value": [
+        31378,
+        30487,
+        30798,
+        73.52,
+        71.87,
+        69.71,
+        727,
+        720,
+        546,
+        75.03,
+        72.94,
+        68.07
+    ]
+}
