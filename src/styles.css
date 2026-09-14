@@ -497,10 +497,10 @@ body::before {
   inset: 0;
   z-index: 3;
   display: grid;
-  grid-template-columns: minmax(300px, 25%) minmax(0, 1fr) minmax(360px, 30%);
+  grid-template-columns: minmax(340px, 25%) minmax(320px, 1fr) minmax(440px, 31%);
   grid-template-rows: auto minmax(0, 1fr) minmax(0, 36vh);
   gap: 12px;
-  padding: 14px 16px 14px;
+  padding: 16px 18px;
   pointer-events: none;
   font-size: 13px;
 }
@@ -515,7 +515,7 @@ body::before {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding-right: 380px;
+  padding-right: 610px;
 }
 
 .board-left,
@@ -525,11 +525,14 @@ body::before {
   flex-direction: column;
   gap: 12px;
   overflow: auto;
-  padding: 2px;
+  padding: 2px 4px 2px 2px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(42, 37, 33, 0.24) transparent;
 }
 
 .board-left {
   grid-column: 1;
+  overflow-x: hidden;
 }
 
 .board-right {
@@ -571,6 +574,17 @@ body::before {
   background: rgba(250, 246, 236, 0.9);
   backdrop-filter: blur(10px);
   box-shadow: 0 30px 60px -30px rgba(40, 30, 10, 0.5);
+}
+
+.board-left > .card,
+.board-right > .card {
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+}
+
+.board-right > .card {
+  overflow: hidden;
 }
 
 .card::before {
@@ -762,7 +776,7 @@ body::before {
 }
 
 .board-top .reset {
-  margin-left: auto;
+  margin-left: 0;
 }
 
 .field {
@@ -869,6 +883,79 @@ input[type='range'] {
   display: inline-flex;
   gap: 3px;
   margin-left: 6px;
+}
+
+/* Keep the dense planner tables inside their paper cards. */
+.board-left .grid,
+.board-right > .card > .grid:first-of-type {
+  table-layout: fixed;
+}
+
+.board-left .grid th,
+.board-left .grid td,
+.board-right > .card > .grid:first-of-type th,
+.board-right > .card > .grid:first-of-type td {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.board-left .grid th:first-child {
+  width: 43%;
+}
+
+.board-left .grid th:nth-child(2),
+.board-left .grid th:nth-child(3) {
+  width: 17%;
+}
+
+.board-left .grid th:last-child {
+  width: 23%;
+}
+
+.board-left .util {
+  width: 42px;
+}
+
+.board-right > .card > .grid:first-of-type th:nth-child(1) {
+  width: 76px;
+}
+
+.board-right > .card > .grid:first-of-type th:nth-child(2) {
+  width: 118px;
+}
+
+.board-right > .card > .grid:first-of-type th:nth-child(3),
+.board-right > .card > .grid:first-of-type th:nth-child(4) {
+  width: 76px;
+}
+
+.board-right > .card > .grid:first-of-type th:nth-child(5) {
+  width: 58px;
+}
+
+.board-right > .card > .grid:first-of-type th:last-child {
+  width: 24px;
+}
+
+.board-right > .card > .grid:first-of-type select.field {
+  width: 100%;
+  max-width: none;
+}
+
+.board-right > .card > .grid:first-of-type .w-80 .field {
+  width: 64px;
+}
+
+.board-right > .card > .grid:first-of-type tbody td:nth-child(2) .kind {
+  display: block;
+  margin: 3px 0 0;
+}
+
+.board-right > .card > .grid.small {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .util {
@@ -1191,6 +1278,31 @@ input[type='range'] {
     left: auto;
     transform: none;
     width: 100%;
+  }
+}
+
+@media (min-width: 1101px) {
+  .board-on .toolbar .hint {
+    display: none;
+  }
+}
+
+@media (max-width: 1500px) and (min-width: 1101px) {
+  .board-layer {
+    grid-template-columns: minmax(320px, 28%) minmax(260px, 1fr) minmax(410px, 36%);
+  }
+
+  .board-top {
+    padding-right: 560px;
+  }
+
+  .wk {
+    min-width: 136px;
+  }
+
+  .card {
+    padding-left: 14px;
+    padding-right: 14px;
   }
 }
 
