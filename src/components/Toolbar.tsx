@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useStore } from '../store'
+import type { ThemePref } from '../theme'
 
 function Switch({ on, onClick, label }: { on: boolean; onClick: () => void; label: string }) {
   return (
@@ -10,6 +11,36 @@ function Switch({ on, onClick, label }: { on: boolean; onClick: () => void; labe
       </span>
       <span className="switch-label">{label}</span>
     </button>
+  )
+}
+
+const THEMES: { id: ThemePref; label: string; icon: string }[] = [
+  { id: 'system', label: 'Follow system theme', icon: 'M4 5h16v11H4z M9 20h6 M12 16v4' },
+  { id: 'light', label: 'Light theme', icon: 'M12 7a5 5 0 1 0 0 10a5 5 0 1 0 0-10 M12 2v2 M12 20v2 M2 12h2 M20 12h2 M5 5l1.5 1.5 M17.5 17.5L19 19 M5 19l1.5-1.5 M17.5 6.5L19 5' },
+  { id: 'dark', label: 'Dark theme', icon: 'M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z' },
+]
+
+function ThemeControl() {
+  const theme = useStore((s) => s.theme)
+  const setTheme = useStore((s) => s.setTheme)
+  return (
+    <div className="theme-seg" role="radiogroup" aria-label="Colour theme">
+      {THEMES.map((t) => (
+        <button
+          key={t.id}
+          role="radio"
+          aria-checked={theme === t.id}
+          aria-label={t.label}
+          title={t.label}
+          className={theme === t.id ? 'on' : ''}
+          onClick={() => setTheme(t.id)}
+        >
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+            <path d={t.icon} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      ))}
+    </div>
   )
 }
 
@@ -55,6 +86,7 @@ export function Toolbar() {
       </motion.button>
       <Switch on={exploded} onClick={toggle} label="Exploded view" />
       <Switch on={board} onClick={toggleBoard} label="Plan board" />
+      <ThemeControl />
     </motion.div>
   )
 }

@@ -3,8 +3,11 @@ import * as THREE from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 import { MeshReflectorMaterial } from '@react-three/drei'
 import { Ripples } from './ripples'
+import { makeFoamMaterial } from './foam'
 import { BODY_X0, BODY_X1, bottomY, halfWidth } from './geometry'
 import { WATER_Y, drainEvents, motion, trickActive } from './motion'
+import { useStore } from '../store'
+import { SCENE_PALETTE } from '../theme'
 
 /** grid resolution of the ripple simulation (cells per side) */
 const N = 128
@@ -88,9 +91,6 @@ function spawnDrop(d: Drops, x: number, y: number, z: number, vx: number, vy: nu
   d.size[i] = size
 }
 
-/** what the water reflects where there is no fish — a pale sky, so the pool reads blue */
-const SKY = '#cfe3ef'
-
 /**
  * The reflector renders the scene into its own target once per frame, clearing with the
  * renderer's clear colour. The page canvas is transparent (the paper is CSS), so this sets an
@@ -99,7 +99,9 @@ const SKY = '#cfe3ef'
  */
 function ReflectionBackdrop() {
   const gl = useThree((s) => s.gl)
-  useFrame(() => gl.setClearColor(SKY, 1))
+  // what the water reflects where there is no fish — a pale sky by day, a dusk sky in dark mode
+  const sky = SCENE_PALETTE[useStore((s) => s.resolvedTheme)].sky
+  useFrame(() => gl.setClearColor(sky, 1))
   return null
 }
 
@@ -122,6 +124,11 @@ export function Water() {
   }, [normalData])
   const alphaTex = useMemo(makePoolAlpha, [])
   const drops = useMemo(makeDrops, [])
+  const palette = SCENE_PALETTE[useStore((s) => s.resolvedTheme)]
+  const foam = useMemo(() => makeFoamMaterial(normalTex, alphaTex), [normalTex, alphaTex])
+  useEffect(() => {
+    ;(foam.uniforms.uColor.value as THREE.Color).set(palette.foam)
+  }, [foam, palette])
   const rnd = useMemo(() => {
     let s = 91
     return () => {
@@ -135,10 +142,11 @@ export function Water() {
       geometry.dispose()
       normalTex.dispose()
       alphaTex.dispose()
+      foam.dispose()
       drops.mesh.geometry.dispose()
       ;(drops.mesh.material as THREE.Material).dispose()
     },
-    [geometry, normalTex, alphaTex, drops],
+    [geometry, normalTex, alphaTex, foam, drops],
   )
 
   const nextDrip = useRef(1.2)
@@ -226,6 +234,7 @@ export function Water() {
     pos.needsUpdate = true
     sim.writeNormalMap(normalData, NORMAL_STRENGTH)
     normalTex.needsUpdate = true
+    foam.uniforms.uTime.value = t
   })
 
   return (
@@ -238,7 +247,7 @@ export function Water() {
           mixBlur={0.5}
           mixStrength={0.95}
           mirror={0.7}
-          color="#8fbcd8"
+          color={palette.water}
           roughness={0.18}
           metalness={0.05}
           envMapIntensity={1.2}
@@ -248,6 +257,7 @@ export function Water() {
           opacity={0.8}
         />
       </mesh>
+      <mesh geometry={geometry} material={foam} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.004, 0]} />
       <primitive object={drops.mesh} position={[0, -WATER_Y, 0]} />
     </group>
   )

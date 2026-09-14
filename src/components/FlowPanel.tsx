@@ -112,7 +112,7 @@ export function FlowPanel() {
             const faded = hover !== null && hover !== n.id && !links.some((l) => (l.source === hover && l.target === n.id) || (l.target === hover && l.source === n.id))
             return (
               <g key={n.id} opacity={faded ? 0.3 : 1} onMouseEnter={() => setHover(n.id)}>
-                <rect x={x} y={n.y} width={NODE_W} height={n.h} rx={2} fill={n.color} stroke="rgba(42,37,33,.35)" />
+                <rect x={x} y={n.y} width={NODE_W} height={n.h} rx={2} fill={n.color} stroke="var(--line)" />
                 <text x={n.col === 0 ? x - 8 : x + NODE_W + 8} y={n.y + n.h / 2} dy="0.35em" textAnchor={n.col === 0 ? 'end' : 'start'} className="flow-label">
                   {n.label}
                   <tspan className="flow-sub"> {n.sub}</tspan>

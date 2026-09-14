@@ -7,6 +7,7 @@ import { mergePrices } from './prices/prices'
 import { fetchSsbPrices } from './prices/ssb'
 import type { PriceBook } from './prices/types'
 import { nextWeek } from './format'
+import { applyTheme, loadThemePref, resolveTheme, saveThemePref, watchSystemTheme, type Theme, type ThemePref } from './theme'
 
 export type PriceStatus = { state: 'idle' | 'loading' | 'ok' | 'error'; message: string }
 
@@ -32,6 +33,10 @@ interface State extends PlanSlice {
   trickRequest: number
   /** true while the fish is mid-trick */
   tricking: boolean
+  /** what the viewer picked; 'system' follows the OS */
+  theme: ThemePref
+  /** the theme actually on screen */
+  resolvedTheme: Theme
   setHovered: (id: CutId | null) => void
   select: (id: CutId) => void
   clear: () => void
@@ -39,6 +44,7 @@ interface State extends PlanSlice {
   toggleBoard: () => void
   doTrick: () => void
   setTricking: (on: boolean) => void
+  setTheme: (pref: ThemePref) => void
   selectWeek: (week: string) => void
   addWeek: () => void
   setSupplyKg: (week: string, rawKg: number) => void
@@ -90,6 +96,8 @@ export const useStore = create<State>((set, get) => ({
   priceStatus: { state: 'idle', message: '' },
   trickRequest: 0,
   tricking: false,
+  theme: loadThemePref(),
+  resolvedTheme: resolveTheme(loadThemePref()),
   ...load(),
 
   setHovered: (hovered) => set({ hovered }),
@@ -100,6 +108,10 @@ export const useStore = create<State>((set, get) => ({
   // a trick needs the whole fish, so it pulls the pieces back together first
   doTrick: () => set((s) => (s.tricking ? s : { trickRequest: s.trickRequest + 1, tricking: true, selected: null, exploded: false })),
   setTricking: (tricking) => set({ tricking }),
+  setTheme: (theme) => {
+    saveThemePref(theme)
+    set({ theme, resolvedTheme: resolveTheme(theme) })
+  },
 
   selectWeek: (week) => set({ week }),
   addWeek: () =>
@@ -162,4 +174,12 @@ useStore.subscribe((s) => {
   } catch {
     // storage unavailable; the plan lives in memory
   }
+})
+
+applyTheme(useStore.getState().resolvedTheme)
+useStore.subscribe((s, prev) => {
+  if (s.resolvedTheme !== prev.resolvedTheme) applyTheme(s.resolvedTheme)
+})
+watchSystemTheme((t) => {
+  if (useStore.getState().theme === 'system') useStore.setState({ resolvedTheme: t })
 })
