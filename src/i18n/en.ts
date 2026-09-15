@@ -17,6 +17,10 @@ export const en = {
   'toolbar.theme.light': 'Light theme',
   'toolbar.theme.dark': 'Dark theme',
   'toolbar.lang': 'Bytt til norsk',
+  'menu.label': 'Menu',
+  'menu.language': 'Language',
+  'sing.hint': 'Drop an audio file to change the song · Esc to stop',
+  'sing.stop': 'Stop',
 
   'info.close': 'Close',
   'info.cutOf': 'Cut {n} of {total}',

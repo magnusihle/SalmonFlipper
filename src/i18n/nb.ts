@@ -19,6 +19,10 @@ export const nb: Record<MessageKey, string> = {
   'toolbar.theme.light': 'Lyst tema',
   'toolbar.theme.dark': 'Mørkt tema',
   'toolbar.lang': 'Switch to English',
+  'menu.label': 'Meny',
+  'menu.language': 'Språk',
+  'sing.hint': 'Slipp en lydfil for å bytte sang · Esc for å stoppe',
+  'sing.stop': 'Stopp',
 
   'info.close': 'Lukk',
   'info.cutOf': 'Stykke {n} av {total}',

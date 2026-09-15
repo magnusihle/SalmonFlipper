@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useStore } from '../store'
 import type { ThemePref } from '../theme'
 import { useT, type T } from '../i18n'
@@ -104,13 +104,68 @@ export function Toolbar() {
   )
 }
 
-/** Theme and language live in the opposite corner so the toolbar never crowds the centred title. */
+/** Theme and language are set-and-forget, so they wait behind a menu in the corner opposite the toolbar. */
 export function Prefs() {
   const t = useT()
+  const [open, setOpen] = useState(false)
+  const root = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: PointerEvent) => {
+      if (!root.current?.contains(e.target as Node)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('pointerdown', onDown)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('pointerdown', onDown)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
   return (
-    <motion.div className="prefs" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 0.6 }}>
-      <LangToggle t={t} />
-      <ThemeControl t={t} />
+    <motion.div
+      ref={root}
+      className="prefs"
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.1, duration: 0.6 }}
+    >
+      <button
+        className={`menu-btn${open ? ' on' : ''}`}
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-haspopup="true"
+        aria-label={t('menu.label')}
+        title={t('menu.label')}
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M4 7h16 M4 12h16 M4 17h16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="menu"
+            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.97, transition: { duration: 0.12 } }}
+            transition={{ type: 'spring', stiffness: 520, damping: 34 }}
+          >
+            <div className="menu-row">
+              <span>{t('toolbar.theme')}</span>
+              <ThemeControl t={t} />
+            </div>
+            <div className="menu-row">
+              <span>{t('menu.language')}</span>
+              <LangToggle t={t} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }

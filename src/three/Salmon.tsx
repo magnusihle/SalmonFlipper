@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import { Environment, Lightformer, OrbitControls } from '@react-three/drei'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
-import { Bone, Cut, Fin, Flesh, Segment } from './Cut'
+import { Bone, Cut, Fin, Flesh, Segment, useCutMaterials } from './Cut'
 import { LAYOUT, CHEEK_POS, SPINE_Y, X, type V3 } from './layout'
 import {
   BODY_X1,
@@ -23,6 +23,7 @@ import {
 import { REST_Y, TRICKS, WATER_Y, finSway, motion, startTrick, stepMotion, trickActive } from './motion'
 import { Water } from './Water'
 import { useStore } from '../store'
+import { act, songFrame } from '../billy/player'
 
 function Eye({ side }: { side: 1 | -1 }) {
   const x = -0.85
@@ -38,6 +39,35 @@ function Eye({ side }: { side: 1 | -1 }) {
         <sphereGeometry args={[0.02, 24, 24]} />
         <meshStandardMaterial color="#0f1114" roughness={0.15} metalness={0.3} />
       </mesh>
+    </group>
+  )
+}
+
+/** Lower jaw and the dark gape behind it; shut (and hidden) unless the fish is singing. */
+function Mouth() {
+  const { skin } = useCutMaterials()
+  const root = useRef<THREE.Group>(null)
+  const jaw = useRef<THREE.Group>(null)
+  const gape = useRef<THREE.Mesh>(null)
+  const pivot: V3 = [-0.84, centerY(-0.84) - 0.045, 0]
+  useFrame(() => {
+    const m = act.mouth
+    if (!root.current || !jaw.current || !gape.current) return
+    root.current.visible = m > 0.01
+    jaw.current.rotation.z = m * 0.5
+    gape.current.scale.y = 0.006 + m * 0.04
+  })
+  return (
+    <group ref={root} position={pivot} visible={false}>
+      <mesh ref={gape} position={[-0.11, -0.005, 0]} scale={[0.07, 1, halfWidth(-0.95) * 0.75]}>
+        <sphereGeometry args={[1, 24, 12]} />
+        <meshStandardMaterial color="#3a1216" roughness={0.8} />
+      </mesh>
+      <group ref={jaw}>
+        <mesh position={[-0.085, -0.004, 0]} scale={[0.1, 0.022, halfWidth(-0.92) * 0.85]} material={skin}>
+          <sphereGeometry args={[1, 24, 12]} />
+        </mesh>
+      </group>
     </group>
   )
 }
@@ -75,11 +105,24 @@ function MotionDriver() {
     next.current++
   }, [request])
 
+  const setSinging = useStore.setState
+  // eased copy of the dance so the plastic-motor snaps still read as motion
+  const dance = useRef({ ry: 0, rz: 0 })
+
   useFrame((_, dt) => {
-    const { exploded, selected } = useStore.getState()
+    const { exploded, selected, singing } = useStore.getState()
+    const step = Math.min(dt, 1 / 20)
     const wasActive = trickActive()
-    stepMotion(Math.min(dt, 1 / 20), exploded || selected ? 0.25 : 1)
+    const song = songFrame(step)
+    if (singing && !song) setSinging({ singing: false })
+    // a wall-mounted fish doesn't wriggle
+    stepMotion(step, song ? 0.15 : exploded || selected ? 0.25 : 1)
     if (wasActive && !trickActive()) setTricking(false)
+    if (trickActive()) return
+    const d = dance.current
+    d.ry = THREE.MathUtils.damp(d.ry, song?.ry ?? 0, 14, step)
+    d.rz = THREE.MathUtils.damp(d.rz, song?.rz ?? 0, 14, step)
+    if (Math.abs(d.ry) + Math.abs(d.rz) > 1e-3) motion.pose = { ...motion.pose, ry: d.ry, rz: d.rz }
   })
   return null
 }
@@ -142,6 +185,7 @@ export function Salmon() {
         <Segment spec={LAYOUT.head.seg!} />
         <Eye side={1} />
         <Eye side={-1} />
+        <Mouth />
       </Cut>
 
       <Cut id="cheek">

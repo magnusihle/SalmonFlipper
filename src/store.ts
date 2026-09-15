@@ -8,6 +8,7 @@ import { fetchSsbPrices } from './prices/ssb'
 import type { PriceBook } from './prices/types'
 import { nextWeek, setFormatLocale } from './format'
 import { LOCALE, loadLang, saveLang, translate, type Lang } from './i18n/core'
+import { startFile, startGroove, stopSong } from './billy/player'
 import { applyTheme, loadThemePref, resolveTheme, saveThemePref, watchSystemTheme, type Theme, type ThemePref } from './theme'
 
 /** `weeks` is set on a successful fetch so the panel can phrase it in the current language */
@@ -35,6 +36,8 @@ interface State extends PlanSlice {
   trickRequest: number
   /** true while the fish is mid-trick */
   tricking: boolean
+  /** the singing-fish easter egg is playing */
+  singing: boolean
   /** what the viewer picked; 'system' follows the OS */
   theme: ThemePref
   /** the theme actually on screen */
@@ -47,6 +50,9 @@ interface State extends PlanSlice {
   toggleBoard: () => void
   doTrick: () => void
   setTricking: (on: boolean) => void
+  /** no file: the built-in groove */
+  sing: (file?: File) => void
+  stopSinging: () => void
   setTheme: (pref: ThemePref) => void
   setLang: (lang: Lang) => void
   selectWeek: (week: string) => void
@@ -100,6 +106,7 @@ export const useStore = create<State>((set, get) => ({
   priceStatus: { state: 'idle', message: '' },
   trickRequest: 0,
   tricking: false,
+  singing: false,
   theme: loadThemePref(),
   resolvedTheme: resolveTheme(loadThemePref()),
   lang: loadLang(),
@@ -111,8 +118,25 @@ export const useStore = create<State>((set, get) => ({
   toggleExploded: () => set((s) => ({ exploded: !s.exploded, selected: null })),
   toggleBoard: () => set((s) => ({ board: !s.board, selected: null })),
   // a trick needs the whole fish, so it pulls the pieces back together first
-  doTrick: () => set((s) => (s.tricking ? s : { trickRequest: s.trickRequest + 1, tricking: true, selected: null, exploded: false })),
+  doTrick: () => {
+    if (get().tricking) return
+    stopSong()
+    set((s) => ({ trickRequest: s.trickRequest + 1, tricking: true, singing: false, selected: null, exploded: false }))
+  },
   setTricking: (tricking) => set({ tricking }),
+  sing: (file) => {
+    if (get().tricking) return
+    set({ singing: true, selected: null, exploded: false })
+    if (!file) return startGroove()
+    startFile(file).catch(() => {
+      stopSong()
+      set({ singing: false })
+    })
+  },
+  stopSinging: () => {
+    stopSong()
+    set({ singing: false })
+  },
   setTheme: (theme) => {
     saveThemePref(theme)
     set({ theme, resolvedTheme: resolveTheme(theme) })

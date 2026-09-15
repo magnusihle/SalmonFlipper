@@ -6,6 +6,7 @@ import { Legend } from './components/Legend'
 import { InfoPanel } from './components/InfoPanel'
 import { Prefs, Toolbar } from './components/Toolbar'
 import { Board } from './components/Board'
+import { SingingFish } from './components/SingingFish'
 import { useStore } from './store'
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
       <AnimatePresence>{!board && <InfoPanel key="info" />}</AnimatePresence>
       <Board />
       <AnimatePresence>{!board && <Legend key="legend" />}</AnimatePresence>
+      <SingingFish />
     </div>
   )
 }
