@@ -3,6 +3,8 @@ import * as THREE from 'three'
 import { useFrame, useThree } from '@react-three/fiber'
 import { MeshReflectorMaterial } from '@react-three/drei'
 import { Ripples } from './ripples'
+import { Foam, Ocean } from './ocean'
+import { writeNormalMap, writeScalarMap } from './maps'
 import { makeFoamMaterial } from './foam'
 import { BODY_X0, BODY_X1, bottomY, halfWidth } from './geometry'
 import { WATER_Y, drainEvents, motion, trickActive } from './motion'
@@ -13,8 +15,12 @@ import { SCENE_PALETTE } from '../theme'
 const N = 128
 /** world size of the pool, square */
 const SIZE = 6.5
-/** how much the ripple slopes are exaggerated in the normal map */
-const NORMAL_STRENGTH = 2.6
+/** how much the surface slopes are exaggerated in the normal map */
+const NORMAL_STRENGTH = 1.5
+/** the spectral patch spans n cells, the mesh n-1 segments — same cell size, so the patch is one cell wider */
+const PATCH = (SIZE * N) / (N - 1)
+/** how much ripple speed (height units per substep) turns into foam */
+const CHURN_GAIN = 40
 /** max droplets in flight */
 const MAX_DROPS = 320
 const GRAVITY = 5
@@ -113,7 +119,24 @@ function ReflectionBackdrop() {
 export function Water() {
   const gl = useThree((s) => s.gl)
   const sim = useMemo(() => new Ripples(N, SIZE, { damping: 0.987, sponge: 12 }), [])
-  const geometry = useMemo(() => new THREE.PlaneGeometry(SIZE, SIZE, N - 1, N - 1), [])
+  const geometry = useMemo(() => {
+    const g = new THREE.PlaneGeometry(SIZE, SIZE, N - 1, N - 1)
+    // vertices move every frame; a generous fixed bound keeps the culler honest without recomputing
+    g.boundingSphere = new THREE.Sphere(new THREE.Vector3(), SIZE)
+    return g
+  }, [])
+  const basePos = useMemo(() => (geometry.attributes.position.array as Float32Array).slice(), [geometry])
+  const ocean = useMemo(() => new Ocean(N, PATCH, { wind: 3.2, fetch: 60, windDir: 0.6, spread: 4, amplitude: 0.45, choppiness: 0.7, seed: 7 }), [])
+  const foamSim = useMemo(() => new Foam(N, { halfLife: 2.5, bias: 0.92, gain: 4 }), [])
+  const surface = useMemo(() => new Float32Array(N * N), [])
+  const foamData = useMemo(() => new Uint8Array(N * N * 4), [])
+  const foamTex = useMemo(() => {
+    const t = new THREE.DataTexture(foamData, N, N, THREE.RGBAFormat)
+    t.minFilter = THREE.LinearFilter
+    t.magFilter = THREE.LinearFilter
+    t.needsUpdate = true
+    return t
+  }, [foamData])
   const normalData = useMemo(() => new Uint8Array(N * N * 4), [])
   const normalTex = useMemo(() => {
     const t = new THREE.DataTexture(normalData, N, N, THREE.RGBAFormat)
@@ -125,7 +148,7 @@ export function Water() {
   const alphaTex = useMemo(makePoolAlpha, [])
   const drops = useMemo(makeDrops, [])
   const palette = SCENE_PALETTE[useStore((s) => s.resolvedTheme)]
-  const foam = useMemo(() => makeFoamMaterial(normalTex, alphaTex), [normalTex, alphaTex])
+  const foam = useMemo(() => makeFoamMaterial(normalTex, alphaTex, foamTex), [normalTex, alphaTex, foamTex])
   useEffect(() => {
     ;(foam.uniforms.uColor.value as THREE.Color).set(palette.foam)
   }, [foam, palette])
@@ -142,11 +165,12 @@ export function Water() {
       geometry.dispose()
       normalTex.dispose()
       alphaTex.dispose()
+      foamTex.dispose()
       foam.dispose()
       drops.mesh.geometry.dispose()
       ;(drops.mesh.material as THREE.Material).dispose()
     },
-    [geometry, normalTex, alphaTex, foam, drops],
+    [geometry, normalTex, alphaTex, foamTex, foam, drops],
   )
 
   const nextDrip = useRef(1.2)
@@ -225,22 +249,36 @@ export function Water() {
     }
     if (any || drops.count > 0) drops.mesh.instanceMatrix.needsUpdate = true
 
-    // advance the surface and push it into the mesh + normal map
+    // advance both surfaces: the spectral swell and the interactive ripples ride on top of each other
     sim.step(dt)
+    ocean.update(t)
     const pos = geometry.attributes.position as THREE.BufferAttribute
     const arr = pos.array as Float32Array
     const h = sim.height
-    for (let i = 0; i < N * N; i++) arr[i * 3 + 2] = h[i]
+    const lam = ocean.choppiness
+    for (let i = 0; i < N * N; i++) {
+      surface[i] = h[i] + ocean.height[i]
+      const o = i * 3
+      // plane local y points along world -z
+      arr[o] = basePos[o] + lam * ocean.dispX[i]
+      arr[o + 1] = basePos[o + 1] - lam * ocean.dispZ[i]
+      arr[o + 2] = surface[i]
+    }
     pos.needsUpdate = true
-    sim.writeNormalMap(normalData, NORMAL_STRENGTH)
+    writeNormalMap(surface, N, sim.cell, normalData, NORMAL_STRENGTH)
     normalTex.needsUpdate = true
+
+    // foam: folding crests and churning ripples inject, everything decays
+    foamSim.step(dt, ocean.jacobian, sim.velocity, CHURN_GAIN)
+    writeScalarMap(foamSim.density, N, foamData)
+    foamTex.needsUpdate = true
     foam.uniforms.uTime.value = t
   })
 
   return (
     <group position={[0, WATER_Y, 0]}>
       <ReflectionBackdrop />
-      <mesh geometry={geometry} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh geometry={geometry} rotation={[-Math.PI / 2, 0, 0]} frustumCulled={false}>
         <MeshReflectorMaterial
           resolution={512}
           blur={[200, 80]}
@@ -257,7 +295,7 @@ export function Water() {
           opacity={0.8}
         />
       </mesh>
-      <mesh geometry={geometry} material={foam} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.004, 0]} />
+      <mesh geometry={geometry} material={foam} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.004, 0]} frustumCulled={false} />
       <primitive object={drops.mesh} position={[0, -WATER_Y, 0]} />
     </group>
   )

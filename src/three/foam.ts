@@ -64,6 +64,7 @@ uniform float uCoverage;
 uniform vec3 uColor;
 uniform sampler2D uNormalMap;
 uniform sampler2D uAlphaMap;
+uniform sampler2D uFoam;
 varying vec2 vUv;
 varying float vHeight;
 ${PERLIN}
@@ -75,20 +76,21 @@ void main() {
   float n2 = fbm(p * 1.7 - vec2(uTime * 0.03, -uTime * 0.05) + 31.0);
   float n = n1 * 0.65 + n2 * 0.35;
 
-  // ripple slope and crest height both whip up more foam
+  // accumulated foam from folding crests and splashes is the main driver;
+  // steep ripple slopes add a little lace of their own
+  float density = texture2D(uFoam, vUv).r;
   vec3 nm = texture2D(uNormalMap, vUv).xyz * 2.0 - 1.0;
   float slope = clamp(length(nm.xy) * 2.5, 0.0, 1.0);
-  float crest = clamp(vHeight * 60.0, 0.0, 1.0);
-  float agitation = max(slope, crest * 0.7);
+  float agitation = clamp(density * 1.4 + slope * 0.25, 0.0, 1.0);
 
-  float threshold = mix(0.45, 0.0, uCoverage) - agitation * 0.45;
+  float threshold = mix(0.62, 0.05, uCoverage) - agitation * 0.9;
   float foam = smoothstep(threshold, threshold + 0.22, n);
   // lacy edges: a finer noise eats holes in the sheet
   float lace = smoothstep(-0.25, 0.35, cnoise(p * 6.0 + uTime * 0.1));
   foam *= mix(0.55, 1.0, lace);
 
   float edge = texture2D(uAlphaMap, vUv).r;
-  float alpha = foam * edge * (0.55 + agitation * 0.45);
+  float alpha = foam * edge * (0.35 + agitation * 0.65);
   if (alpha < 0.005) discard;
   gl_FragColor = vec4(uColor, alpha);
 }
@@ -102,17 +104,18 @@ export interface FoamOptions {
   color?: THREE.ColorRepresentation
 }
 
-export function makeFoamMaterial(normalMap: THREE.Texture, alphaMap: THREE.Texture, opts: FoamOptions = {}) {
+export function makeFoamMaterial(normalMap: THREE.Texture, alphaMap: THREE.Texture, foamMap: THREE.Texture, opts: FoamOptions = {}) {
   return new THREE.ShaderMaterial({
     vertexShader: VERT,
     fragmentShader: FRAG,
     uniforms: {
       uTime: { value: 0 },
       uScale: { value: opts.scale ?? 7 },
-      uCoverage: { value: opts.coverage ?? 0.42 },
+      uCoverage: { value: opts.coverage ?? 0.12 },
       uColor: { value: new THREE.Color(opts.color ?? '#f4fbfd') },
       uNormalMap: { value: normalMap },
       uAlphaMap: { value: alphaMap },
+      uFoam: { value: foamMap },
     },
     transparent: true,
     depthWrite: false,

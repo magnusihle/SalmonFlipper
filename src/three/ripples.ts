@@ -16,6 +16,8 @@ export interface RipplesOptions {
   substep?: number
 }
 
+import { writeNormalMap } from './maps'
+
 export class Ripples {
   readonly n: number
   readonly size: number
@@ -136,31 +138,8 @@ export class Ripples {
     return e
   }
 
-  /**
-   * Write a tangent-space normal map (RGBA8, `n`×`n`) into `out`. Texture row 0 is the
-   * bottom edge (v = 0), which is the grid's last row, so the rows are flipped here.
-   * `strength` scales the slope so tiny ripples still read.
-   */
+  /** Tangent-space normal map of this surface alone; see `writeNormalMap` in maps.ts. */
   writeNormalMap(out: Uint8Array, strength: number) {
-    const { n, height: h } = this
-    const k = strength / (2 * this.cell)
-    for (let r = 0; r < n; r++) {
-      const up = r > 0 ? r - 1 : r
-      const down = r < n - 1 ? r + 1 : r
-      const tr = n - 1 - r
-      for (let c = 0; c < n; c++) {
-        const left = c > 0 ? c - 1 : c
-        const right = c < n - 1 ? c + 1 : c
-        // slope along +x (u) and along +v (which is -row)
-        const dx = (h[r * n + right] - h[r * n + left]) * k
-        const dv = (h[up * n + c] - h[down * n + c]) * k
-        const inv = 1 / Math.sqrt(dx * dx + dv * dv + 1)
-        const o = (tr * n + c) * 4
-        out[o] = Math.round((-dx * inv * 0.5 + 0.5) * 255)
-        out[o + 1] = Math.round((-dv * inv * 0.5 + 0.5) * 255)
-        out[o + 2] = Math.round((inv * 0.5 + 0.5) * 255)
-        out[o + 3] = 255
-      }
-    }
+    writeNormalMap(this.height, this.n, this.cell, out, strength)
   }
 }

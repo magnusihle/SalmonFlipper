@@ -20,7 +20,7 @@ import {
   tailFin,
   topY,
 } from './geometry'
-import { REST_Y, TRICKS, finSway, motion, startTrick, stepMotion, trickActive } from './motion'
+import { REST_Y, TRICKS, WATER_Y, finSway, motion, startTrick, stepMotion, trickActive } from './motion'
 import { Water } from './Water'
 import { useStore } from '../store'
 
@@ -212,6 +212,9 @@ export function Salmon() {
   )
 }
 
+/** how far past the horizon the orbit may go before the water clamp takes over */
+const MAX_POLAR = 1.75
+
 function CameraRig() {
   const controls = useRef<OrbitControlsImpl>(null)
   const selected = useStore((s) => s.selected)
@@ -237,6 +240,11 @@ function CameraRig() {
       const next = THREE.MathUtils.damp(len, dolly.current.goal, 3, dt)
       cam.position.copy(c.target).add(dir.multiplyScalar(next / len))
     }
+    // the water is a single-sided plane: keep the eye above it however low the orbit goes.
+    // camera y = target.y + distance · cos(polar), so the lowest allowed polar follows the distance
+    const dist = c.object.position.distanceTo(c.target)
+    const cosMax = (WATER_Y + 0.3 - c.target.y) / dist
+    c.maxPolarAngle = Math.min(MAX_POLAR, Math.acos(THREE.MathUtils.clamp(cosMax, -1, 1)))
     c.update()
   })
   return (
@@ -246,7 +254,7 @@ function CameraRig() {
       minDistance={1.8}
       maxDistance={6}
       minPolarAngle={0.55}
-      maxPolarAngle={1.75}
+      maxPolarAngle={MAX_POLAR}
       enableDamping
       dampingFactor={0.08}
       rotateSpeed={0.7}
