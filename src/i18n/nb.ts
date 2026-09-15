@@ -1,10 +1,10 @@
 import type { MessageKey } from './en'
 
 export const nb: Record<MessageKey, string> = {
-  'app.title': 'Laksens stykker – den komplette guiden',
-  'header.overline': 'Den komplette',
-  'header.title': 'Laksens stykker',
-  'header.rule': 'og kulinarisk guide',
+  'app.title': 'Salmon Flipper',
+  'header.overline': '3D-snittkart',
+  'header.title': 'Salmon Flipper',
+  'header.rule': 'planlegger og kulinarisk guide',
 
   'toolbar.hint.poster': 'dra for å rotere · klikk et stykke',
   'toolbar.hint.board': 'klikk et stykke for planen',

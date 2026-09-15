@@ -1,7 +1,15 @@
 const { app, BrowserWindow, shell } = require('electron')
+const fs = require('node:fs')
 const path = require('node:path')
 
 const DEV_URL = process.env.VITE_DEV_SERVER_URL
+
+// userData is named after productName; move the pre-rename profile so saved plans survive
+function migrateUserData() {
+  const current = app.getPath('userData')
+  const legacy = path.join(path.dirname(current), 'Salmon Cuts')
+  if (!fs.existsSync(current) && fs.existsSync(legacy)) fs.renameSync(legacy, current)
+}
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -9,7 +17,7 @@ function createWindow() {
     height: 920,
     minWidth: 960,
     minHeight: 640,
-    title: 'Salmon Cuts',
+    title: 'Salmon Flipper',
     backgroundColor: '#efe7d3',
     autoHideMenuBar: true,
     webPreferences: { contextIsolation: true, sandbox: true },
@@ -22,6 +30,10 @@ function createWindow() {
   if (DEV_URL) win.loadURL(DEV_URL)
   else win.loadFile(path.join(__dirname, '..', 'dist', 'index.html'))
 }
+
+try {
+  migrateUserData()
+} catch {}
 
 app.whenReady().then(() => {
   createWindow()

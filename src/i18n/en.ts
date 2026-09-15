@@ -1,8 +1,8 @@
 export const en = {
-  'app.title': 'The Ultimate Salmon Cuts',
-  'header.overline': 'The Ultimate',
-  'header.title': 'Salmon Cuts',
-  'header.rule': 'and culinary guide',
+  'app.title': 'Salmon Flipper',
+  'header.overline': '3D cutting chart',
+  'header.title': 'Salmon Flipper',
+  'header.rule': 'planner and culinary guide',
 
   'toolbar.hint.poster': 'drag to orbit · click a cut',
   'toolbar.hint.board': 'click a cut for its plan',

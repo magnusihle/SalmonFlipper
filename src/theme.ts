@@ -2,7 +2,7 @@ export type ThemePref = 'system' | 'light' | 'dark'
 export type Theme = 'light' | 'dark'
 
 /** also read by the inline script in index.html, so the first paint already has the right theme */
-export const THEME_KEY = 'salmon-cuts:theme'
+export const THEME_KEY = 'salmon-flipper:theme'
 
 const hasWindow = typeof window !== 'undefined'
 const query = () => (hasWindow && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null)

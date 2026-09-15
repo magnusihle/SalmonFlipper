@@ -3,7 +3,7 @@ import { CENTRE_NAMES_NB, PRODUCT_NAMES_NB, nb } from './nb'
 import { productName as seedProductName } from '../data/products'
 
 export type Lang = 'en' | 'nb'
-export const LANG_KEY = 'salmon-cuts:lang'
+export const LANG_KEY = 'salmon-flipper:lang'
 export const LOCALE: Record<Lang, string> = { en: 'en-GB', nb: 'nb-NO' }
 
 const DICT: Record<Lang, Record<MessageKey, string>> = { en, nb }

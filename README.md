@@ -1,4 +1,4 @@
-# The Ultimate Salmon Cuts
+# Salmon Flipper
 
 An interactive 3D salmon-cut planner. The procedural fish can be explored cut by cut, while the plan board turns weekly demand, yields, supply, prices, processing capacity, and residual products into a complete mass-balance and margin view.
 

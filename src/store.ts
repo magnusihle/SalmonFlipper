@@ -62,7 +62,7 @@ interface State extends PlanSlice {
   refreshSsb: () => Promise<void>
 }
 
-const STORAGE_KEY = 'salmon-cuts-planner:v1'
+const STORAGE_KEY = 'salmon-flipper-planner:v1'
 
 const seedPlan = (): PlanSlice => ({
   week: SEED.supply[0]?.week ?? SEED.orders[0]?.week ?? '2026-W38',

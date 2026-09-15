@@ -3,12 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Ultimate Salmon Cuts</title>
+    <title>Salmon Flipper</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script>
       // pick the theme before the stylesheet paints so a dark visitor never sees a cream flash
       (function () {
-        var pref = localStorage.getItem('salmon-cuts:theme');
+        // carry settings and plans over from the app's former name
+        [['salmon-cuts:theme', 'salmon-flipper:theme'], ['salmon-cuts:lang', 'salmon-flipper:lang'], ['salmon-cuts-planner:v1', 'salmon-flipper-planner:v1']].forEach(function (k) {
+          var old = localStorage.getItem(k[0]);
+          if (old !== null && localStorage.getItem(k[1]) === null) localStorage.setItem(k[1], old);
+          localStorage.removeItem(k[0]);
+        });
+        var pref = localStorage.getItem('salmon-flipper:theme');
         var dark = pref === 'dark' || (pref !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
         document.documentElement.dataset.theme = dark ? 'dark' : 'light';
       })();

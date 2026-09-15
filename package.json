@@ -1,5 +1,5 @@
 {
-  "name": "salmon-cuts",
+  "name": "salmon-flipper",
   "private": true,
   "version": "0.1.2",
   "type": "module",
@@ -37,11 +37,11 @@
     "vite": "^6.0.0",
     "vitest": "^3.2.7"
   },
-  "description": "The Ultimate Salmon Cuts: an interactive 3D cutting chart and weekly cutting planner.",
+  "description": "Salmon Flipper: an interactive 3D cutting chart and weekly cutting planner.",
   "main": "electron/main.cjs",
   "build": {
-    "appId": "com.salmonflipper.salmoncuts",
-    "productName": "Salmon Cuts",
+    "appId": "com.salmonflipper.app",
+    "productName": "Salmon Flipper",
     "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
     "directories": {
       "output": "release",
@@ -129,5 +129,5 @@
       "syncDesktopName": true
     }
   },
-  "desktopName": "salmon-cuts.desktop"
+  "desktopName": "salmon-flipper.desktop"
 }
